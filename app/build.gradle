@@ -52,7 +52,7 @@ android {
 
     // Remove mockRelease as it's not needed.
     android.variantFilter { variant ->
-        if(variant.buildType.name.equals('release')
+        if (variant.buildType.name.equals('release')
                 && variant.getFlavors().get(0).name.equals('mock')) {
             variant.setIgnore(true)
         }
@@ -78,6 +78,7 @@ dependencies {
     implementation "com.squareup.sqlbrite:sqlbrite:$rootProject.sqlbriteVersion"
 
     // Dagger dependencies
+    implementation 'com.android.support:support-v4:27.1.1'
     annotationProcessor "com.google.dagger:dagger-compiler:$rootProject.daggerVersion"
     compileOnly 'org.glassfish:javax.annotation:10.0-b28'
     implementation "com.google.dagger:dagger:$rootProject.daggerVersion"
