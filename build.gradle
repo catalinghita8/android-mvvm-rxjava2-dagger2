@@ -35,6 +35,7 @@ ext {
 
     // App dependencies
     supportLibraryVersion = '27.1.1'
+    arch_version = '1.1.1'
     constraintLayout = '1.1.2'
     guavaVersion = '18.0'
     junitVersion = '4.12'
@@ -42,7 +43,7 @@ ext {
     powerMockito = '1.6.2'
     hamcrestVersion = '1.3'
     runnerVersion = '0.5'
-    daggerVersion = '2.11'
+    daggerVersion = '2.11-rc2'
     rulesVersion = '0.5'
     espressoVersion = '2.2.2'
     retrofitClientVersion = '2.3.0'
@@ -51,5 +52,6 @@ ext {
     gsonConverterVersion = '2.3.0'
     rxjavaVersion = '2.1.7'
     rxandroidVersion = '2.0.1'
+    rx1androidVersion = '1.2.1'
     sqlbriteVersion = '1.1.1'
 }

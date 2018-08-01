@@ -1,6 +1,5 @@
-package com.inspiringteam.xchange.rates;
+package com.inspiringteam.xchange.ui.rates;
 
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 
 import com.inspiringteam.xchange.R;
@@ -20,10 +19,10 @@ public class RatesActivity extends DaggerAppCompatActivity {
         setContentView(R.layout.activity_rates);
 
         // Set up fragment
-        RatesFragment fragment = (RatesFragment) getFragmentManager().findFragmentById(R.id.contentFrame);
+        RatesFragment fragment = (RatesFragment) getSupportFragmentManager().findFragmentById(R.id.contentFrame);
         if (fragment == null) {
             fragment = mInjectedFragment;
-            ActivityUtils.addFragmentToActivity(getFragmentManager(), fragment, R.id.contentFrame);
+            ActivityUtils.addFragmentToActivity(getSupportFragmentManager(), fragment, R.id.contentFrame);
         }
     }
 }

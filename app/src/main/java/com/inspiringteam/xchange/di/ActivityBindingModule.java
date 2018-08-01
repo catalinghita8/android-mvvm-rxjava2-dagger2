@@ -1,8 +1,8 @@
 package com.inspiringteam.xchange.di;
 
-import com.inspiringteam.xchange.rates.RatesActivity;
+import com.inspiringteam.xchange.ui.rates.RatesActivity;
 import com.inspiringteam.xchange.di.scopes.ActivityScoped;
-import com.inspiringteam.xchange.rates.RatesModule;
+import com.inspiringteam.xchange.ui.rates.RatesModule;
 
 import dagger.Module;
 import dagger.android.ContributesAndroidInjector;
@@ -19,6 +19,6 @@ import dagger.android.ContributesAndroidInjector;
 @Module
 public abstract class ActivityBindingModule {
     @ActivityScoped
-    @ContributesAndroidInjector(modules = RatesModule.class)
+    @ContributesAndroidInjector(modules = {RatesModule.class})
     abstract RatesActivity ratesActivity();
 }
