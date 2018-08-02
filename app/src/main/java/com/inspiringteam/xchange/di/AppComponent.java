@@ -2,7 +2,7 @@ package com.inspiringteam.xchange.di;
 
 import android.app.Application;
 
-import com.inspiringteam.xchange.data.source.RatesRepositoryModule;
+import com.inspiringteam.xchange.data.source.QuakesRepositoryModule;
 import com.inspiringteam.xchange.di.scopes.AppScoped;
 
 import dagger.BindsInstance;
@@ -17,7 +17,7 @@ import dagger.android.support.AndroidSupportInjectionModule;
  * and location of subcomponents, which will be in our case, activities
  */
 @AppScoped
-@Component(modules = {RatesRepositoryModule.class,
+@Component(modules = {QuakesRepositoryModule.class,
         AppModule.class,
         ActivityBindingModule.class,
         AndroidSupportInjectionModule.class})

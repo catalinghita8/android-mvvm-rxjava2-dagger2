@@ -3,7 +3,7 @@ package com.inspiringteam.xchange.di;
 import android.app.Application;
 import android.content.Context;
 
-import com.inspiringteam.xchange.di.rates.RatesViewModelModule;
+import com.inspiringteam.xchange.di.quakes.QuakesViewModelModule;
 
 import dagger.Binds;
 import dagger.Module;
@@ -16,7 +16,7 @@ import dagger.Module;
  * {@link
  * AppComponent}.
  */
-@Module(includes = {RatesViewModelModule.class})
+@Module(includes = {QuakesViewModelModule.class})
 public abstract class AppModule {
     //expose Application as an injectable context
     @Binds

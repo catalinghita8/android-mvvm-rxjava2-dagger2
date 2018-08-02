@@ -1,4 +1,4 @@
-package com.inspiringteam.xchange.ui.rates;
+package com.inspiringteam.xchange.ui.quakes;
 
 import android.os.Bundle;
 
@@ -9,17 +9,17 @@ import javax.inject.Inject;
 
 import dagger.android.support.DaggerAppCompatActivity;
 
-public class RatesActivity extends DaggerAppCompatActivity {
+public class QuakesActivity extends DaggerAppCompatActivity {
     @Inject
-    RatesFragment mInjectedFragment;
+    QuakesFragment mInjectedFragment;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_rates);
+        setContentView(R.layout.activity_quakes);
 
         // Set up fragment
-        RatesFragment fragment = (RatesFragment) getSupportFragmentManager().findFragmentById(R.id.contentFrame);
+        QuakesFragment fragment = (QuakesFragment) getSupportFragmentManager().findFragmentById(R.id.contentFrame);
         if (fragment == null) {
             fragment = mInjectedFragment;
             ActivityUtils.addFragmentToActivity(getSupportFragmentManager(), fragment, R.id.contentFrame);

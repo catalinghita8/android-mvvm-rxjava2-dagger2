@@ -10,7 +10,7 @@
         android:supportsRtl="true"
         android:name=".Application"
         android:theme="@style/AppTheme">
-        <activity android:name=".ui.rates.RatesActivity">
+        <activity android:name=".ui.quakes.QuakesActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 

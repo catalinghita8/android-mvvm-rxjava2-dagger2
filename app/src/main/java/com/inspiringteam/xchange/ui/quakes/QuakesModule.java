@@ -1,6 +1,6 @@
-package com.inspiringteam.xchange.ui.rates;
+package com.inspiringteam.xchange.ui.quakes;
 
-import com.inspiringteam.xchange.di.rates.RatesViewModelModule;
+import com.inspiringteam.xchange.di.quakes.QuakesViewModelModule;
 import com.inspiringteam.xchange.di.scopes.ActivityScoped;
 import com.inspiringteam.xchange.di.scopes.FragmentScoped;
 import com.inspiringteam.xchange.util.providers.BaseNavigator;
@@ -15,8 +15,8 @@ import dagger.Provides;
 import dagger.android.ContributesAndroidInjector;
 
 
-@Module (includes = {RatesModule.RatesAbstractModule.class, RatesViewModelModule.class})
-public class RatesModule {
+@Module (includes = {QuakesModule.QuakesAbstractModule.class, QuakesViewModelModule.class})
+public class QuakesModule {
 
     @ActivityScoped
     @Provides
@@ -26,28 +26,28 @@ public class RatesModule {
 
     @ActivityScoped
     @Provides
-    BaseResourceProvider provideResourceProvider(RatesActivity context) {
+    BaseResourceProvider provideResourceProvider(QuakesActivity context) {
         return new ResourceProvider(context);
     }
 
 
     @Provides
     @ActivityScoped
-    RatesNavigator provideRatesNavigator(BaseNavigator navigationProvider) {
-        return new RatesNavigator(navigationProvider);
+    QuakesNavigator provideQuakesNavigator(BaseNavigator navigationProvider) {
+        return new QuakesNavigator(navigationProvider);
     }
 
 
     @Provides
     @ActivityScoped
-    BaseNavigator provideBaseNavigator(RatesActivity activity) {
+    BaseNavigator provideBaseNavigator(QuakesActivity activity) {
         return new Navigator();
     }
 
     @Module
-    public interface RatesAbstractModule {
+    public interface QuakesAbstractModule {
         @FragmentScoped
         @ContributesAndroidInjector
-        RatesFragment ratesFragment();
+        QuakesFragment ratesFragment();
     }
 }

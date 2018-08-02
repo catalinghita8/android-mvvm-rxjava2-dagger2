@@ -1,4 +1,4 @@
-package com.inspiringteam.xchange.ui.rates;
+package com.inspiringteam.xchange.ui.quakes;
 
 import android.support.annotation.NonNull;
 
@@ -7,11 +7,11 @@ import com.inspiringteam.xchange.util.providers.BaseNavigator;
 /**
  * Defines the navigation actions that can be called from the task list screen.
  */
-public class RatesNavigator {
+public class QuakesNavigator {
     @NonNull
     private final BaseNavigator mNavigationProvider;
 
-    public RatesNavigator(@NonNull BaseNavigator mNavigationProvider) {
+    public QuakesNavigator(@NonNull BaseNavigator mNavigationProvider) {
         this.mNavigationProvider = mNavigationProvider;
     }
 

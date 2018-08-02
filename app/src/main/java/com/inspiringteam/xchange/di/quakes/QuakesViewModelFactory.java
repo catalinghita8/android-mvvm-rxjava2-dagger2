@@ -1,10 +1,9 @@
-package com.inspiringteam.xchange.di.rates;
+package com.inspiringteam.xchange.di.quakes;
 
 import android.arch.lifecycle.ViewModel;
 import android.arch.lifecycle.ViewModelProvider;
 
 import com.inspiringteam.xchange.di.scopes.ActivityScoped;
-import com.inspiringteam.xchange.di.scopes.AppScoped;
 
 import java.util.Map;
 
@@ -12,11 +11,11 @@ import javax.inject.Inject;
 import javax.inject.Provider;
 
 @ActivityScoped
-public class RatesViewModelFactory implements ViewModelProvider.Factory {
+public class QuakesViewModelFactory implements ViewModelProvider.Factory {
     private final Map<Class<? extends ViewModel>, Provider<ViewModel>> creators;
 
     @Inject
-    public RatesViewModelFactory(Map<Class<? extends ViewModel>, Provider<ViewModel>> creators) {
+    public QuakesViewModelFactory(Map<Class<? extends ViewModel>, Provider<ViewModel>> creators) {
         this.creators = creators;
     }
 
