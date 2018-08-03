@@ -5,7 +5,7 @@ import android.support.annotation.NonNull;
 import com.inspiringteam.xchange.util.providers.BaseNavigator;
 
 /**
- * Defines the navigation actions that can be called from the task list screen.
+ * Defines the navigation actions that can be called from the quake list screen.
  */
 public class QuakesNavigator {
     @NonNull

@@ -19,21 +19,21 @@ class QuakeItemViewHolder implements View.OnClickListener {
 
     private TextView mTitle;
 
-    private CheckBox mCheckBox;
+    private TextView mMag;
 
     private Action0 mOnItemClickAction;
 
     public QuakeItemViewHolder(View rowView) {
         mRow = rowView;
         mTitle = rowView.findViewById(R.id.title);
-
+        mMag = rowView.findViewById(R.id.mag);
 
         rowView.setOnClickListener(this);
     }
 
     public void bindItem(QuakeItem quakeItem) {
         mTitle.setText(quakeItem.getQuake().getLocation());
-
+        mMag.setText(String.valueOf(quakeItem.getQuake().getMagnitude()));
 
 //        mRow.setBackgroundResource(quakeItem.getBackground());
 

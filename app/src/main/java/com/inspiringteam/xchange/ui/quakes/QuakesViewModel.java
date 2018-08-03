@@ -13,9 +13,11 @@ import java.util.List;
 
 import javax.inject.Inject;
 
-import rx.Observable;
-import rx.subjects.BehaviorSubject;
-import rx.subjects.PublishSubject;
+import io.reactivex.Completable;
+import io.reactivex.Observable;
+import io.reactivex.subjects.BehaviorSubject;
+import io.reactivex.subjects.PublishSubject;
+
 
 /**
  * ViewModel for the list of quake.
@@ -50,7 +52,7 @@ public final class QuakesViewModel extends ViewModel{
         mRepository = ratesRepository;
         mSchedulerProvider = schedulerProvider;
 
-        mLoadingIndicatorSubject = BehaviorSubject.create(false);
+        mLoadingIndicatorSubject = BehaviorSubject.create();
         mSnackbarText = PublishSubject.create();
     }
 
@@ -61,7 +63,7 @@ public final class QuakesViewModel extends ViewModel{
     @NonNull
     public Observable<QuakesUiModel> getUiModel() {
         return getQuakeItems()
-                .doOnSubscribe(() -> mLoadingIndicatorSubject.onNext(true))
+                .doOnSubscribe(__ -> mLoadingIndicatorSubject.onNext(true))
                 .doOnNext(__ -> mLoadingIndicatorSubject.onNext(false))
                 .doOnError(__ -> mSnackbarText.onNext(R.string.loading_quakes_error))
                 .map(this::constructQuakesModel);
@@ -85,14 +87,38 @@ public final class QuakesViewModel extends ViewModel{
     }
 
     private Observable<List<QuakeItem>> getQuakeItems() {
-
         return mRepository.getQuakes()
-                        .flatMap(list -> Observable.from(list)
-                                .map(this::constructQuakeItem).toList());
+                        .flatMap(list -> Observable.fromIterable(list)
+                                .map(this::constructQuakeItem).toList().toObservable());
     }
 
     private QuakeItem constructQuakeItem(Quake quake){
         return new QuakeItem(quake, () -> handleQuakeClicked(quake));
+    }
+
+    /**
+     * Trigger a force update of the tasks.
+     */
+    public Completable forceUpdateQuakes() {
+        mLoadingIndicatorSubject.onNext(true);
+        return mRepository.refreshQuakes()
+                .doOnTerminate(() -> mLoadingIndicatorSubject.onNext(false));
+    }
+
+    /**
+     * @return a stream of ids that should be displayed in the snackbar.
+     */
+    @NonNull
+    public Observable<Integer> getSnackbarMessage() {
+        return mSnackbarText.hide();
+    }
+
+    /**
+     * @return a stream that emits true if the progress indicator should be displayed, false otherwise.
+     */
+    @NonNull
+    public Observable<Boolean> getLoadingIndicatorVisibility() {
+        return mLoadingIndicatorSubject.hide();
     }
 
     private void handleQuakeClicked(Quake quake) {

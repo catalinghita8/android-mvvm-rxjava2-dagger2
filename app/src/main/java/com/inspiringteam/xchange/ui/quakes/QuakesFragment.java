@@ -4,7 +4,10 @@ import android.arch.lifecycle.ViewModelProvider;
 import android.arch.lifecycle.ViewModelProviders;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.annotation.StringRes;
+import android.support.design.widget.Snackbar;
 import android.support.v4.content.ContextCompat;
+import android.support.v4.widget.SwipeRefreshLayout;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -23,9 +26,10 @@ import java.util.List;
 
 import javax.inject.Inject;
 
-import rx.android.schedulers.AndroidSchedulers;
-import rx.schedulers.Schedulers;
-import rx.subscriptions.CompositeSubscription;
+import io.reactivex.android.schedulers.AndroidSchedulers;
+import io.reactivex.disposables.CompositeDisposable;
+import io.reactivex.schedulers.Schedulers;
+
 
 
 @ActivityScoped
@@ -43,7 +47,7 @@ public class QuakesFragment extends dagger.android.support.DaggerFragment implem
 
     private LinearLayout mQuakesView;
 
-    private CompositeSubscription mSubscription = new CompositeSubscription();
+    private CompositeDisposable mSubscription = new CompositeDisposable();
 
     @Inject
     ViewModelProvider.Factory viewModelFactory;
@@ -96,9 +100,9 @@ public class QuakesFragment extends dagger.android.support.DaggerFragment implem
 
     @Override
     public void bindViewModel() {
-        // using a CompositeSubscription to gather all the subscriptions, so all of them can be
+        // using a CompositeDisposable to gather all the subscriptions, so all of them can be
         // later unsubscribed together
-        mSubscription = new CompositeSubscription();
+        mSubscription = new CompositeDisposable();
 
         // The ViewModel holds an observable containing the state of the UI.
         // subscribe to the emissions of the Ui Model
@@ -111,6 +115,30 @@ public class QuakesFragment extends dagger.android.support.DaggerFragment implem
                         this::updateView,
                         //onError
                         error -> Log.d(TAG, "Error loading quakes")
+                ));
+
+        // subscribe to the emissions of the snackbar text
+        // every time the snackbar text emits, show the snackbar
+        mSubscription.add(mViewModel.getSnackbarMessage()
+                .subscribeOn(Schedulers.computation())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(
+                        //onNext
+                        this::showSnackbar,
+                        //onError
+                        error -> Log.d(TAG, "Error showing snackbar", error)
+                ));
+
+        // subscribe to the emissions of the loading indicator visibility
+        // for every emission, update the visibility of the loading indicator
+        mSubscription.add(mViewModel.getLoadingIndicatorVisibility()
+                .subscribeOn(Schedulers.computation())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(
+                        //onNext
+                        this::setLoadingIndicatorVisibility,
+                        //onError
+                        error -> Log.d(TAG, "Error showing loading indicator", error)
                 ));
     }
 
@@ -140,7 +168,17 @@ public class QuakesFragment extends dagger.android.support.DaggerFragment implem
     }
 
     private void forceUpdate() {
-        // TODO
+        mSubscription.add(mViewModel.forceUpdateQuakes()
+                .subscribeOn(Schedulers.computation())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(
+                        // onCompleted
+                        () -> {
+                            // nothing to do here
+                        },
+                        // onError
+                        error -> Log.d(TAG, "Error refreshing quakes", error)
+                ));
     }
 
     private void updateView(QuakesUiModel model){
@@ -163,5 +201,19 @@ public class QuakesFragment extends dagger.android.support.DaggerFragment implem
 
     private void showQuakes(List<QuakeItem> quakes) {
         mListAdapter.replaceData(quakes);
+    }
+
+    private void showSnackbar(@StringRes int message) {
+        Snackbar.make(getView(), message, Snackbar.LENGTH_LONG).show();
+    }
+
+    private void setLoadingIndicatorVisibility(final boolean isVisible) {
+        if (getView() == null) {
+            return;
+        }
+        final SwipeRefreshLayout srl = getView().findViewById(R.id.refresh_layout);
+
+        // Make sure setRefreshing() is called after the layout is done with everything else.
+        srl.post(() -> srl.setRefreshing(isVisible));
     }
 }

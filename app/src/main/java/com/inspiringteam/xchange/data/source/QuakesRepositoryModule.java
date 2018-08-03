@@ -1,7 +1,30 @@
 package com.inspiringteam.xchange.data.source;
 
-import dagger.Module;
+import com.inspiringteam.xchange.data.source.local.QuakesLocalDataModule;
+import com.inspiringteam.xchange.data.source.local.QuakesLocalDataSource;
+import com.inspiringteam.xchange.data.source.remote.QuakesApiService;
+import com.inspiringteam.xchange.data.source.remote.QuakesRemoteDataModule;
+import com.inspiringteam.xchange.data.source.remote.QuakesRemoteDataSource;
+import com.inspiringteam.xchange.data.source.scopes.Local;
+import com.inspiringteam.xchange.data.source.scopes.Remote;
+import com.inspiringteam.xchange.di.scopes.AppScoped;
 
-@Module
+import dagger.Module;
+import dagger.Provides;
+
+@Module (includes = {QuakesLocalDataModule.class, QuakesRemoteDataModule.class})
 public class QuakesRepositoryModule {
+    @Provides
+    @Local
+    @AppScoped
+    QuakesDataSource provideQuakesLocalDataSource() {
+        return new QuakesLocalDataSource();
+    }
+
+    @Provides
+    @Remote
+    @AppScoped
+    QuakesDataSource provideQuakesRemoteDataSource(QuakesApiService apiService) {
+        return new QuakesRemoteDataSource(apiService);
+    }
 }

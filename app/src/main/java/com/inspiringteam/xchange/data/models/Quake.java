@@ -4,7 +4,7 @@ import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 import com.google.common.base.Objects;
 /**
- * Immutable model class for a Task.
+ * Immutable model class for a Quake.
  */
 
 public final class Quake {

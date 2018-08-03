@@ -9,14 +9,14 @@ import java.util.List;
 public class QuakesResponse {
     @SerializedName("features")
     @Expose
-    public List<Quake> quakeList;
+    public List<QuakeWrapper> quakeWrapperList;
 
-    public List<Quake> getQuakeList() {
-        return quakeList;
+    public List<QuakeWrapper> getQuakeWrapperList() {
+        return quakeWrapperList;
     }
 
-    public void setQuakeList(List<Quake> quakeList) {
-        this.quakeList = quakeList;
+    public void setquakeWrapperList(List<QuakeWrapper> quakeWrapperList) {
+        this.quakeWrapperList = quakeWrapperList;
     }
 }
 
