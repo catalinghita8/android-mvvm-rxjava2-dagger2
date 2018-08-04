@@ -53,5 +53,5 @@ ext {
     rxjavaVersion = '2.1.7'
     rxandroidVersion = '2.0.1'
     rx1androidVersion = '1.2.1'
-    sqlbriteVersion = '1.1.1'
+    sqlbriteVersion = '2.0.0'
 }

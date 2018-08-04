@@ -2,7 +2,8 @@ package com.inspiringteam.xchange.util.schedulers;
 
 import android.support.annotation.NonNull;
 
-import rx.Scheduler;
+import io.reactivex.Scheduler;
+
 
 /**
  * Allow providing different types of {@link Scheduler}s.

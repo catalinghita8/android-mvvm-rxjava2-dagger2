@@ -35,10 +35,11 @@ public class QuakesRepository  implements QuakesDataSource{
 
     @Inject
     public QuakesRepository(@Remote QuakesDataSource quakesRemoteDataSource,
-                            @Local QuakesDataSource quakesLocalDataSource) {
+                            @Local QuakesDataSource quakesLocalDataSource,
+                                    BaseSchedulerProvider schedulerProvider) {
         mQuakesRemoteDataSource = quakesRemoteDataSource;
         mQuakesLocalDataSource = quakesLocalDataSource;
-        mBaseSchedulerProvider = SchedulerProvider.getInstance();
+        mBaseSchedulerProvider = schedulerProvider;
     }
 
     /**
@@ -47,11 +48,6 @@ public class QuakesRepository  implements QuakesDataSource{
     @NonNull
     @Override
     public Observable<List<Quake>> getQuakes(){
-//        List<Quake> quakes = new ArrayList<>();
-//        quakes.add(new Quake(2.4, "Some quake 1"));
-//        quakes.add(new Quake(1.9, "Some Quake 2"));
-//
-//        return Observable.just(quakes);
         return mQuakesRemoteDataSource.getQuakes();
     }
 

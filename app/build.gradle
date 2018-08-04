@@ -75,7 +75,7 @@ dependencies {
     implementation "com.android.support:support-v4:$rootProject.supportLibraryVersion"
     implementation "com.android.support.constraint:constraint-layout:$rootProject.constraintLayout"
     implementation "com.google.guava:guava:$rootProject.guavaVersion"
-    implementation "com.squareup.sqlbrite:sqlbrite:$rootProject.sqlbriteVersion"
+    implementation "com.squareup.sqlbrite2:sqlbrite:$rootProject.sqlbriteVersion"
 
     // Dagger dependencies
     implementation 'com.android.support:support-v4:27.1.1'

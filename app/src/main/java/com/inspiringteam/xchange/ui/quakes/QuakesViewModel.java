@@ -32,9 +32,6 @@ public final class QuakesViewModel extends ViewModel{
     @NonNull
     private final QuakesNavigator mNavigator;
 
-    @NonNull
-    private final BaseSchedulerProvider mSchedulerProvider;
-
     // using a BehaviourSubject because we are interested in the last object that was emitted before
     // subscribing. Like this we ensure that the loading indicator has the correct visibility.
     private final BehaviorSubject<Boolean> mLoadingIndicatorSubject;
@@ -46,11 +43,9 @@ public final class QuakesViewModel extends ViewModel{
 
     @Inject
     public QuakesViewModel(@NonNull QuakesRepository ratesRepository,
-                          @NonNull QuakesNavigator navigationProvider,
-                          @NonNull BaseSchedulerProvider schedulerProvider) {
+                          @NonNull QuakesNavigator navigationProvider) {
         mNavigator = navigationProvider;
         mRepository = ratesRepository;
-        mSchedulerProvider = schedulerProvider;
 
         mLoadingIndicatorSubject = BehaviorSubject.create();
         mSnackbarText = PublishSubject.create();

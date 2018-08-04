@@ -16,7 +16,7 @@ import dagger.Module;
  * {@link
  * AppComponent}.
  */
-@Module(includes = {QuakesViewModelModule.class})
+@Module
 public abstract class AppModule {
     //expose Application as an injectable context
     @Binds

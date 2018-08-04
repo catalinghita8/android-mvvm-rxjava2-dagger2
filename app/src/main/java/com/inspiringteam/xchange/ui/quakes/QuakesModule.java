@@ -20,12 +20,6 @@ public class QuakesModule {
 
     @ActivityScoped
     @Provides
-    BaseSchedulerProvider provideSchedulerProvider(){
-        return SchedulerProvider.getInstance();
-    }
-
-    @ActivityScoped
-    @Provides
     BaseResourceProvider provideResourceProvider(QuakesActivity context) {
         return new ResourceProvider(context);
     }
