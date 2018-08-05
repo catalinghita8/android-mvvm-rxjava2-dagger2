@@ -11,5 +11,5 @@ import retrofit2.http.Query;
 
 public interface QuakesApiService {
     @GET("all_hour.geojson")
-    Observable<QuakesResponse> getQuakes();
+    Single<QuakesResponse> getQuakes();
 }

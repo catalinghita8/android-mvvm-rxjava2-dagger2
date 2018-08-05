@@ -2,11 +2,10 @@ package com.inspiringteam.xchange.data.source.local;
 
 
 import android.app.Application;
+import android.arch.persistence.room.Room;
 
-import com.inspiringteam.xchange.di.scopes.ActivityScoped;
 import com.inspiringteam.xchange.di.scopes.AppScoped;
-import com.inspiringteam.xchange.util.schedulers.BaseSchedulerProvider;
-import com.inspiringteam.xchange.util.schedulers.SchedulerProvider;
+import com.inspiringteam.xchange.util.Constants;
 
 import dagger.Module;
 import dagger.Provides;
@@ -15,13 +14,16 @@ import dagger.Provides;
 public class QuakesLocalDataModule {
     @AppScoped
     @Provides
-    BaseSchedulerProvider provideSchedulerProvider(){
-        return SchedulerProvider.getInstance();
+    QuakesDatabase provideDb(Application context) {
+        return Room.databaseBuilder(context.getApplicationContext(),
+                QuakesDatabase.class, Constants.QUAKES_ROOM_DB_STRING)
+                .build();
     }
 
     @AppScoped
     @Provides
-    QuakesDbHelper provideQuakesDbHelper(Application context){
-        return new QuakesDbHelper(context.getApplicationContext());
+    QuakesDao provideQuakesDao(QuakesDatabase db) {
+        return db.quakesDao();
     }
+
 }

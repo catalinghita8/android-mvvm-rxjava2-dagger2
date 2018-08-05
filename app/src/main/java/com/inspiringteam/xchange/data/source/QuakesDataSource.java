@@ -8,14 +8,15 @@ import java.util.List;
 
 import io.reactivex.Completable;
 import io.reactivex.Observable;
+import io.reactivex.Single;
 
 
 public interface QuakesDataSource {
     @NonNull
-    Observable<List<Quake>> getQuakes();
+    Single<List<Quake>> getQuakes();
 
     @NonNull
-    Observable<Quake> getQuake(@NonNull String quakeId);
+    Single<Quake> getQuake(@NonNull String quakeId);
 
     @NonNull
     Completable saveQuakes(@NonNull List<Quake> quakes);

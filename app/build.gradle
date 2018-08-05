@@ -75,7 +75,11 @@ dependencies {
     implementation "com.android.support:support-v4:$rootProject.supportLibraryVersion"
     implementation "com.android.support.constraint:constraint-layout:$rootProject.constraintLayout"
     implementation "com.google.guava:guava:$rootProject.guavaVersion"
-    implementation "com.squareup.sqlbrite2:sqlbrite:$rootProject.sqlbriteVersion"
+
+    implementation "android.arch.persistence.room:rxjava2:$rootProject.roomVersion"
+    implementation "android.arch.persistence.room:runtime:$rootProject.roomVersion"
+    annotationProcessor "android.arch.persistence.room:compiler:$rootProject.roomVersion"
+    androidTestImplementation "android.arch.persistence.room:testing:$rootProject.roomVersion"
 
     // Dagger dependencies
     implementation 'com.android.support:support-v4:27.1.1'

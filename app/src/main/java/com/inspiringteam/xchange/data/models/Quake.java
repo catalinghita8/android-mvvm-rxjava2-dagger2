@@ -1,43 +1,64 @@
 package com.inspiringteam.xchange.data.models;
 
+import android.arch.persistence.room.ColumnInfo;
+import android.arch.persistence.room.Entity;
+import android.arch.persistence.room.Ignore;
+import android.arch.persistence.room.PrimaryKey;
+import android.support.annotation.NonNull;
+
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 import com.google.common.base.Objects;
+
+
+
 /**
  * Immutable model class for a Quake.
  */
-
+@Entity(tableName = "quakes")
 public final class Quake {
+    @Ignore
+    private static final long STALE_MS = 5 * 1000; // Data is stale after 5 seconds
+
+    @NonNull
+    @PrimaryKey
+    @ColumnInfo(name = "id")
     @SerializedName("code")
     @Expose
     private String id;
 
     @SerializedName("mag")
+    @ColumnInfo(name = "mag")
     @Expose
     private Double magnitude;
 
     @SerializedName("time")
+    @ColumnInfo(name = "time")
     @Expose
     private Long timeStamp;
 
     @SerializedName("place")
+    @ColumnInfo(name = "place")
     @Expose
     private String location;
 
     @SerializedName("url")
+    @ColumnInfo(name = "url")
     @Expose
     private String url;
 
     @SerializedName("sig")
+    @ColumnInfo(name = "sig")
     @Expose
     private int gravity;
 
+    @Ignore
     public Quake(Double magnitude, String location) {
         this.magnitude = magnitude;
         this.location = location;
     }
 
-    public Quake(String id, Double magnitude, Long timeStamp, String location, String url, int gravity) {
+    public Quake(@NonNull String id, Double magnitude, Long timeStamp, String location, String url, int gravity) {
         this.id = id;
         this.magnitude = magnitude;
         this.timeStamp = timeStamp;
@@ -92,6 +113,10 @@ public final class Quake {
 
     public void setGravity(int gravity) {
         this.gravity = gravity;
+    }
+
+    public boolean isUpToDate() {
+        return System.currentTimeMillis() - timeStamp < STALE_MS;
     }
 
     @Override

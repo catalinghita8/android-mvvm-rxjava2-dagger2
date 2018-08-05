@@ -17,13 +17,15 @@ import javax.inject.Inject;
 
 import io.reactivex.Completable;
 import io.reactivex.Observable;
+import io.reactivex.Single;
+import io.reactivex.functions.Function;
+import io.reactivex.functions.Predicate;
+
+import static com.google.common.base.Preconditions.checkNotNull;
 
 
-/**
- * TODO
- */
 @AppScoped
-public class QuakesRepository  implements QuakesDataSource{
+public class QuakesRepository implements QuakesDataSource {
 
     private final QuakesDataSource mQuakesRemoteDataSource;
 
@@ -36,46 +38,51 @@ public class QuakesRepository  implements QuakesDataSource{
     @Inject
     public QuakesRepository(@Remote QuakesDataSource quakesRemoteDataSource,
                             @Local QuakesDataSource quakesLocalDataSource,
-                                    BaseSchedulerProvider schedulerProvider) {
+                            BaseSchedulerProvider schedulerProvider) {
         mQuakesRemoteDataSource = quakesRemoteDataSource;
         mQuakesLocalDataSource = quakesLocalDataSource;
         mBaseSchedulerProvider = schedulerProvider;
     }
 
-    /**
-     * TODO
-     */
     @NonNull
     @Override
-    public Observable<List<Quake>> getQuakes(){
-        return mQuakesRemoteDataSource.getQuakes();
+    // TODO fix - no data is being retrieved from local store
+    public Single<List<Quake>> getQuakes() {
+        return mQuakesLocalDataSource.getQuakes().flatMap(data -> {
+            if(data.isEmpty() || isStale(data))
+                // after that is retrieved remotely, refresh the cache - TODO rename save quakes to refresh
+                return mQuakesRemoteDataSource.getQuakes()
+                        .doOnSuccess(list -> mQuakesLocalDataSource.saveQuakes(list));
+
+            return Single.just(data);
+        });
     }
 
-    /**
-     * TODO
-     */
+    private boolean isStale(List<Quake> data) {
+        return !data.get(0).isUpToDate();
+    }
+
     @NonNull
     @Override
-    public Observable<Quake> getQuake(@NonNull String quakeId) {
-        return null;
+    public Single<Quake> getQuake(@NonNull String quakeId) {
+        checkNotNull(quakeId);
+        return mQuakesLocalDataSource.getQuake(quakeId);
     }
 
-    /**
-     * TODO
-     */
     @NonNull
     @Override
     public Completable saveQuakes(@NonNull List<Quake> quakes) {
-        return null;
+        checkNotNull(quakes);
+        return mQuakesLocalDataSource.saveQuakes(quakes)
+                .andThen(mQuakesRemoteDataSource.saveQuakes(quakes));
     }
 
-    /**
-     * TODO
-     */
     @NonNull
     @Override
     public Completable saveQuake(@NonNull Quake quake) {
-        return null;
+        checkNotNull(quake);
+        return mQuakesLocalDataSource.saveQuake(quake)
+                .andThen(mQuakesRemoteDataSource.saveQuake(quake));
     }
 
     /**

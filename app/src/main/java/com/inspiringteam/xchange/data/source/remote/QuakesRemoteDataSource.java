@@ -16,6 +16,7 @@ import io.reactivex.Completable;
 import io.reactivex.Observable;
 import io.reactivex.ObservableSource;
 import io.reactivex.Observer;
+import io.reactivex.Single;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.disposables.Disposable;
 import io.reactivex.functions.Function;
@@ -34,17 +35,17 @@ public class QuakesRemoteDataSource implements QuakesDataSource {
 
     @NonNull
     @Override
-    public Observable<List<Quake>> getQuakes() {
+    public Single<List<Quake>> getQuakes() {
         return   mApiService.getQuakes()
-                .flatMap(response -> Observable.fromIterable(response.quakeWrapperList).toList().toObservable())
+                .flatMap(response -> Observable.fromIterable(response.quakeWrapperList).toList())
                 .flatMap(wrappersResponse -> Observable.fromIterable(wrappersResponse)
-                        .map(wrapper -> wrapper.quake).toList().toObservable());
+                        .map(wrapper -> wrapper.quake).toList());
 
     }
 
     @NonNull
     @Override
-    public Observable<Quake> getQuake(@NonNull String quakeId) {
+    public Single<Quake> getQuake(@NonNull String quakeId) {
         return null;
     }
 

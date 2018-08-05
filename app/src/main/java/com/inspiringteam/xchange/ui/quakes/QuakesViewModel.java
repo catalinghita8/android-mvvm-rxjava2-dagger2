@@ -15,6 +15,7 @@ import javax.inject.Inject;
 
 import io.reactivex.Completable;
 import io.reactivex.Observable;
+import io.reactivex.Single;
 import io.reactivex.subjects.BehaviorSubject;
 import io.reactivex.subjects.PublishSubject;
 
@@ -56,10 +57,10 @@ public final class QuakesViewModel extends ViewModel{
      * @return the model for the quakes list.
      */
     @NonNull
-    public Observable<QuakesUiModel> getUiModel() {
+    public Single<QuakesUiModel> getUiModel() {
         return getQuakeItems()
                 .doOnSubscribe(__ -> mLoadingIndicatorSubject.onNext(true))
-                .doOnNext(__ -> mLoadingIndicatorSubject.onNext(false))
+                .doOnSuccess(__ -> mLoadingIndicatorSubject.onNext(false))
                 .doOnError(__ -> mSnackbarText.onNext(R.string.loading_quakes_error))
                 .map(this::constructQuakesModel);
     }
@@ -81,10 +82,10 @@ public final class QuakesViewModel extends ViewModel{
         return new NoQuakesModel(R.string.no_quakes);
     }
 
-    private Observable<List<QuakeItem>> getQuakeItems() {
+    private Single<List<QuakeItem>> getQuakeItems() {
         return mRepository.getQuakes()
                         .flatMap(list -> Observable.fromIterable(list)
-                                .map(this::constructQuakeItem).toList().toObservable());
+                                .map(this::constructQuakeItem).toList());
     }
 
     private QuakeItem constructQuakeItem(Quake quake){
