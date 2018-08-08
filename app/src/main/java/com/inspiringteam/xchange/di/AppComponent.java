@@ -18,6 +18,8 @@ import dagger.android.support.AndroidSupportInjectionModule;
  */
 @AppScoped
 @Component(modules = {QuakesRepositoryModule.class,
+        ViewModelModule.class,
+        UtilsModule.class,
         AppModule.class,
         ActivityBindingModule.class,
         AndroidSupportInjectionModule.class})

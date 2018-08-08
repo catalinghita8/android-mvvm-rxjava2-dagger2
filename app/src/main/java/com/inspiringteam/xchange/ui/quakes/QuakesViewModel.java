@@ -7,6 +7,7 @@ import android.support.v4.util.Pair;
 import com.inspiringteam.xchange.R;
 import com.inspiringteam.xchange.data.models.Quake;
 import com.inspiringteam.xchange.data.source.QuakesRepository;
+import com.inspiringteam.xchange.di.scopes.AppScoped;
 import com.inspiringteam.xchange.util.schedulers.BaseSchedulerProvider;
 
 import java.util.List;
@@ -21,10 +22,11 @@ import io.reactivex.subjects.PublishSubject;
 
 
 /**
- * ViewModel for the list of quake.
+ * ViewModel for quakes screen
  */
 
-public final class QuakesViewModel extends ViewModel{
+@AppScoped
+public final class QuakesViewModel extends ViewModel {
     private static final String TAG = QuakesViewModel.class.getSimpleName();
 
     @NonNull
@@ -44,7 +46,7 @@ public final class QuakesViewModel extends ViewModel{
 
     @Inject
     public QuakesViewModel(@NonNull QuakesRepository ratesRepository,
-                          @NonNull QuakesNavigator navigationProvider) {
+                           @NonNull QuakesNavigator navigationProvider) {
         mNavigator = navigationProvider;
         mRepository = ratesRepository;
 
@@ -54,15 +56,33 @@ public final class QuakesViewModel extends ViewModel{
 
 
     /**
-     * @return the model for the quakes list.
+     * @return the model for the quakes screen
      */
     @NonNull
-    public Single<QuakesUiModel> getUiModel() {
-        return getQuakeItems()
+    public Single<QuakesUiModel> getUiModel(boolean isForcedCall) {
+        return getQuakeItems(isForcedCall)
                 .doOnSubscribe(__ -> mLoadingIndicatorSubject.onNext(true))
                 .doOnSuccess(__ -> mLoadingIndicatorSubject.onNext(false))
                 .doOnError(__ -> mSnackbarText.onNext(R.string.loading_quakes_error))
                 .map(this::constructQuakesModel);
+    }
+
+    /**
+     * @return a list of items that should be displayed to the user
+     * Contains force update logic - if user forces update, the Sources are emptied, therefore
+     * forcing the repository to emit fresh items from the Remote Source
+     */
+    private Single<List<QuakeItem>> getQuakeItems(boolean isForcedCall) {
+        // TODO find better optimized mechanism to triggering remote data retrieval
+        if(isForcedCall) mRepository.deleteAllQuakes();
+
+        return mRepository.getQuakes()
+                .flatMap(list -> Observable.fromIterable(list)
+                        .map(this::constructQuakeItem).toList());
+    }
+
+    private QuakeItem constructQuakeItem(Quake quake) {
+        return new QuakeItem(quake, () -> handleQuakeClicked(quake));
     }
 
     @NonNull
@@ -82,27 +102,8 @@ public final class QuakesViewModel extends ViewModel{
         return new NoQuakesModel(R.string.no_quakes);
     }
 
-    private Single<List<QuakeItem>> getQuakeItems() {
-        return mRepository.getQuakes()
-                        .flatMap(list -> Observable.fromIterable(list)
-                                .map(this::constructQuakeItem).toList());
-    }
-
-    private QuakeItem constructQuakeItem(Quake quake){
-        return new QuakeItem(quake, () -> handleQuakeClicked(quake));
-    }
-
     /**
-     * Trigger a force update of the tasks.
-     */
-    public Completable forceUpdateQuakes() {
-        mLoadingIndicatorSubject.onNext(true);
-        return mRepository.refreshQuakes()
-                .doOnTerminate(() -> mLoadingIndicatorSubject.onNext(false));
-    }
-
-    /**
-     * @return a stream of ids that should be displayed in the snackbar.
+     * @return a stream of ids that should be displayed in the snackbar
      */
     @NonNull
     public Observable<Integer> getSnackbarMessage() {
@@ -110,7 +111,7 @@ public final class QuakesViewModel extends ViewModel{
     }
 
     /**
-     * @return a stream that emits true if the progress indicator should be displayed, false otherwise.
+     * @return a stream that emits true if the progress indicator should be displayed, false otherwise
      */
     @NonNull
     public Observable<Boolean> getLoadingIndicatorVisibility() {
@@ -118,7 +119,7 @@ public final class QuakesViewModel extends ViewModel{
     }
 
     private void handleQuakeClicked(Quake quake) {
-        // TODO
+        // TODO - define actions
         mNavigator.addNewAction();
     }
 }

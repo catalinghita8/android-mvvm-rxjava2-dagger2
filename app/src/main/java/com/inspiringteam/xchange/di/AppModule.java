@@ -3,8 +3,6 @@ package com.inspiringteam.xchange.di;
 import android.app.Application;
 import android.content.Context;
 
-import com.inspiringteam.xchange.di.quakes.QuakesViewModelModule;
-
 import dagger.Binds;
 import dagger.Module;
 

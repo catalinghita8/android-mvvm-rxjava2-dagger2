@@ -4,13 +4,14 @@ import android.arch.lifecycle.ViewModel;
 import android.arch.lifecycle.ViewModelProvider;
 
 import com.inspiringteam.xchange.di.scopes.ActivityScoped;
+import com.inspiringteam.xchange.di.scopes.AppScoped;
 
 import java.util.Map;
 
 import javax.inject.Inject;
 import javax.inject.Provider;
 
-@ActivityScoped
+@AppScoped
 public class QuakesViewModelFactory implements ViewModelProvider.Factory {
     private final Map<Class<? extends ViewModel>, Provider<ViewModel>> creators;
 

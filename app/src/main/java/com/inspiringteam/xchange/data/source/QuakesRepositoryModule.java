@@ -15,7 +15,7 @@ import com.inspiringteam.xchange.util.schedulers.SchedulerProvider;
 import dagger.Module;
 import dagger.Provides;
 
-@Module (includes = {QuakesLocalDataModule.class, QuakesRemoteDataModule.class})
+@Module(includes = {QuakesLocalDataModule.class, QuakesRemoteDataModule.class})
 public class QuakesRepositoryModule {
     @Provides
     @Local
@@ -29,12 +29,5 @@ public class QuakesRepositoryModule {
     @AppScoped
     QuakesDataSource provideQuakesRemoteDataSource(QuakesApiService apiService) {
         return new QuakesRemoteDataSource(apiService);
-    }
-
-    // might not be needed
-    @AppScoped
-    @Provides
-    BaseSchedulerProvider provideSchedulerProvider(){
-        return SchedulerProvider.getInstance();
     }
 }

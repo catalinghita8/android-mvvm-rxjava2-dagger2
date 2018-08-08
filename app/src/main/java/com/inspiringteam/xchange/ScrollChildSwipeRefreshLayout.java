@@ -1,6 +1,7 @@
 package com.inspiringteam.xchange;
 
 import android.content.Context;
+
 import android.support.v4.view.ViewCompat;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.util.AttributeSet;
@@ -28,7 +29,7 @@ public class ScrollChildSwipeRefreshLayout extends SwipeRefreshLayout {
     @Override
     public boolean canChildScrollUp() {
         if (mScrollUpChild != null) {
-            return ViewCompat.canScrollVertically(mScrollUpChild, -1);
+            return canScrollHorizontally(-1);
         }
         return super.canChildScrollUp();
     }

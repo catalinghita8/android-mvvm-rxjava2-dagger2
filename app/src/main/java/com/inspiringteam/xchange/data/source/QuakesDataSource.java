@@ -18,15 +18,9 @@ public interface QuakesDataSource {
     @NonNull
     Single<Quake> getQuake(@NonNull String quakeId);
 
-    @NonNull
-    Completable saveQuakes(@NonNull List<Quake> quakes);
+    void saveQuakes(@NonNull List<Quake> quakes);
 
-    @NonNull
-    Completable saveQuake(@NonNull Quake quake);
-
-
-    @NonNull
-    Completable refreshQuakes();
+    void saveQuake(@NonNull Quake quake);
 
     void deleteAllQuakes();
 

@@ -22,7 +22,9 @@ import io.reactivex.disposables.Disposable;
 import io.reactivex.functions.Function;
 import io.reactivex.schedulers.Schedulers;
 
-
+/**
+ * Remote Data Source implementation
+ */
 @AppScoped
 public class QuakesRemoteDataSource implements QuakesDataSource {
     @NonNull
@@ -33,16 +35,26 @@ public class QuakesRemoteDataSource implements QuakesDataSource {
         mApiService = apiService;
     }
 
+    /**
+     * Fresh items are retrieved from Remote API
+     */
     @NonNull
     @Override
     public Single<List<Quake>> getQuakes() {
-        return   mApiService.getQuakes()
+        return mApiService.getQuakes()
                 .flatMap(response -> Observable.fromIterable(response.quakeWrapperList).toList())
                 .flatMap(wrappersResponse -> Observable.fromIterable(wrappersResponse)
-                        .map(wrapper -> wrapper.quake).toList());
+                        .map(wrapper -> {
+                            wrapper.quake.setTimeStamp(System.currentTimeMillis());
+                            return wrapper.quake;
+                        }).toList());
 
     }
 
+    /**
+     * These methods should be implemented when required
+     * (e.g. when a cloud service is integrated)
+     */
     @NonNull
     @Override
     public Single<Quake> getQuake(@NonNull String quakeId) {
@@ -51,20 +63,12 @@ public class QuakesRemoteDataSource implements QuakesDataSource {
 
     @NonNull
     @Override
-    public Completable saveQuakes(@NonNull List<Quake> quakes) {
-        return null;
+    public void saveQuakes(@NonNull List<Quake> quakes) {
     }
 
     @NonNull
     @Override
-    public Completable saveQuake(@NonNull Quake quake) {
-        return null;
-    }
-
-    @NonNull
-    @Override
-    public Completable refreshQuakes() {
-        return null;
+    public void saveQuake(@NonNull Quake quake) {
     }
 
     @Override

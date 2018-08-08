@@ -18,7 +18,7 @@ import com.google.common.base.Objects;
 @Entity(tableName = "quakes")
 public final class Quake {
     @Ignore
-    private static final long STALE_MS = 5 * 1000; // Data is stale after 5 seconds
+    private static final long STALE_MS = 5 * 60 * 1000; // Data is stale after 5 minutes
 
     @NonNull
     @PrimaryKey

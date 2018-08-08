@@ -9,18 +9,21 @@ import com.inspiringteam.xchange.di.scopes.AppScoped;
 
 import java.util.List;
 
+
 import javax.inject.Inject;
+
 
 import io.reactivex.Completable;
 import io.reactivex.Single;
+import io.reactivex.schedulers.Schedulers;
 
 import static com.google.common.base.Preconditions.checkNotNull;
 
 /**
- * Concrete implementation of a data source as a db.
+ * Concrete implementation of the Local Data Source
  */
 @AppScoped
-public class QuakesLocalDataSource implements QuakesDataSource{
+public class QuakesLocalDataSource implements QuakesDataSource {
     private final QuakesDao mQuakesDao;
 
     @Inject
@@ -29,10 +32,14 @@ public class QuakesLocalDataSource implements QuakesDataSource{
         mQuakesDao = quakesDao;
     }
 
+
+    /**
+     * Items are retrieved from disk
+     */
     @NonNull
     @Override
     public Single<List<Quake>> getQuakes() {
-       return mQuakesDao.getQuakes();
+        return mQuakesDao.getQuakes();
     }
 
     @NonNull
@@ -41,37 +48,28 @@ public class QuakesLocalDataSource implements QuakesDataSource{
         return mQuakesDao.getQuakeById(quakeId);
     }
 
-    @NonNull
     @Override
-    public Completable saveQuakes(@NonNull List<Quake> quakes) {
+    public void saveQuakes(@NonNull List<Quake> quakes) {
         checkNotNull(quakes);
-        return Completable.fromAction(() -> {
-            for(Quake quake : quakes) mQuakesDao.insertQuake(quake);
-        });
+        for (Quake quake : quakes)
+            saveQuake(quake);
     }
 
-    @NonNull
     @Override
-    public Completable saveQuake(@NonNull Quake quake) {
+    public void saveQuake(@NonNull Quake quake) {
         checkNotNull(quake);
-        return Completable.fromAction(() -> {
-            mQuakesDao.insertQuake(quake);
-        });
-    }
-
-    @NonNull
-    @Override
-    public Completable refreshQuakes() {
-        return null;
+        Completable.fromRunnable(() -> mQuakesDao.insertQuake(quake))
+                .subscribeOn(Schedulers.io()).subscribe();
     }
 
     @Override
     public void deleteAllQuakes() {
-
+        Completable.fromRunnable(mQuakesDao::deleteQuakes).subscribeOn(Schedulers.io()).subscribe();
     }
 
     @Override
     public void deleteQuake(@NonNull String quakeId) {
-
+        Completable.fromRunnable(() -> mQuakesDao.deleteQuakeById(quakeId))
+                .subscribeOn(Schedulers.io()).subscribe();
     }
 }

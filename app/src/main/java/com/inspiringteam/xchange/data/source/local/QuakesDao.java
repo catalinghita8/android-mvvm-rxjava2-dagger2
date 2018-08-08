@@ -47,7 +47,7 @@ public interface QuakesDao {
      * @return the number of Quakes deleted. This should always be 1.
      */
     @Query("DELETE FROM Quakes WHERE id = :QuakeId")
-    int deleteQuakeById(int QuakeId);
+    int deleteQuakeById(String QuakeId);
 
 
     /**

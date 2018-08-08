@@ -1,28 +1,23 @@
 package com.inspiringteam.xchange.data.source;
 
 import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
 
 import com.inspiringteam.xchange.data.models.Quake;
 import com.inspiringteam.xchange.data.source.scopes.Local;
 import com.inspiringteam.xchange.data.source.scopes.Remote;
 import com.inspiringteam.xchange.di.scopes.AppScoped;
-import com.inspiringteam.xchange.util.schedulers.BaseSchedulerProvider;
-import com.inspiringteam.xchange.util.schedulers.SchedulerProvider;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import javax.inject.Inject;
 
-import io.reactivex.Completable;
-import io.reactivex.Observable;
 import io.reactivex.Single;
-import io.reactivex.functions.Function;
-import io.reactivex.functions.Predicate;
 
 import static com.google.common.base.Preconditions.checkNotNull;
 
+/**
+ * Consists of a functional set of methods that allow ViewModels to access appropriate data flows
+ */
 
 @AppScoped
 public class QuakesRepository implements QuakesDataSource {
@@ -31,35 +26,34 @@ public class QuakesRepository implements QuakesDataSource {
 
     private final QuakesDataSource mQuakesLocalDataSource;
 
-    @NonNull
-    private final BaseSchedulerProvider mBaseSchedulerProvider;
-
-
+    /**
+     * Dagger allows us to have a single instance of the repository throughout the app
+     *
+     * @param quakesRemoteDataSource the backend data source (Remote Source)
+     * @param quakesLocalDataSource  the device storage data source (Local Source)
+     */
     @Inject
     public QuakesRepository(@Remote QuakesDataSource quakesRemoteDataSource,
-                            @Local QuakesDataSource quakesLocalDataSource,
-                            BaseSchedulerProvider schedulerProvider) {
+                            @Local QuakesDataSource quakesLocalDataSource) {
         mQuakesRemoteDataSource = quakesRemoteDataSource;
         mQuakesLocalDataSource = quakesLocalDataSource;
-        mBaseSchedulerProvider = schedulerProvider;
     }
 
+    /**
+     * The retrieval logic sets the Local Source as the primary source
+     * In case of the absence of Local database or stale data, the Remote
+     * Source is queried and the Local one is refreshed
+     */
     @NonNull
     @Override
-    // TODO fix - no data is being retrieved from local store
     public Single<List<Quake>> getQuakes() {
-        return mQuakesLocalDataSource.getQuakes().flatMap(data -> {
-            if(data.isEmpty() || isStale(data))
-                // after that is retrieved remotely, refresh the cache - TODO rename save quakes to refresh
-                return mQuakesRemoteDataSource.getQuakes()
-                        .doOnSuccess(list -> mQuakesLocalDataSource.saveQuakes(list));
-
-            return Single.just(data);
-        });
-    }
-
-    private boolean isStale(List<Quake> data) {
-        return !data.get(0).isUpToDate();
+        return mQuakesLocalDataSource.getQuakes()
+                .flatMap(data -> {
+                    if (data.isEmpty() || isStale(data)) {
+                        return getFreshQuakes();
+                    }
+                    return Single.just(data);
+                });
     }
 
     @NonNull
@@ -69,44 +63,48 @@ public class QuakesRepository implements QuakesDataSource {
         return mQuakesLocalDataSource.getQuake(quakeId);
     }
 
-    @NonNull
     @Override
-    public Completable saveQuakes(@NonNull List<Quake> quakes) {
+    public void saveQuakes(@NonNull List<Quake> quakes) {
         checkNotNull(quakes);
-        return mQuakesLocalDataSource.saveQuakes(quakes)
-                .andThen(mQuakesRemoteDataSource.saveQuakes(quakes));
+        mQuakesLocalDataSource.saveQuakes(quakes);
+        mQuakesRemoteDataSource.saveQuakes(quakes);
     }
 
-    @NonNull
     @Override
-    public Completable saveQuake(@NonNull Quake quake) {
+    public void saveQuake(@NonNull Quake quake) {
         checkNotNull(quake);
-        return mQuakesLocalDataSource.saveQuake(quake)
-                .andThen(mQuakesRemoteDataSource.saveQuake(quake));
+        mQuakesLocalDataSource.saveQuake(quake);
+        mQuakesRemoteDataSource.saveQuake(quake);
     }
 
-    /**
-     * TODO
-     */
-    @NonNull
-    @Override
-    public Completable refreshQuakes() {
-        return null;
-    }
-
-    /**
-     * TODO
-     */
     @Override
     public void deleteAllQuakes() {
+        mQuakesLocalDataSource.deleteAllQuakes();
+        mQuakesRemoteDataSource.deleteAllQuakes();
+    }
 
+    @Override
+    public void deleteQuake(@NonNull String quakeId) {
+        mQuakesLocalDataSource.deleteQuake(quakeId);
+        mQuakesRemoteDataSource.deleteQuake(quakeId);
     }
 
     /**
-     * TODO
+     * Helper methods, should be encapsulated
      */
-    @Override
-    public void deleteQuake(@NonNull String quakeId) {
+    private boolean isStale(List<Quake> data) {
+        return !data.get(0).isUpToDate();
+    }
 
+    /**
+     * Contains data refreshing logic
+     * Both sources are emptied, then new items are retrieved from querying the Remote Source
+     * and finally, sources are replenished
+     */
+    private Single<List<Quake>> getFreshQuakes() {
+        deleteAllQuakes();
+
+        return mQuakesRemoteDataSource.getQuakes().
+                doOnSuccess(this::saveQuakes);
     }
 }

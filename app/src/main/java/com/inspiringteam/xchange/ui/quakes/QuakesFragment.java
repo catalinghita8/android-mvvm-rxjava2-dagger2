@@ -3,6 +3,7 @@ package com.inspiringteam.xchange.ui.quakes;
 import android.arch.lifecycle.ViewModelProvider;
 import android.arch.lifecycle.ViewModelProviders;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.annotation.StringRes;
 import android.support.design.widget.Snackbar;
@@ -65,7 +66,7 @@ public class QuakesFragment extends dagger.android.support.DaggerFragment implem
     }
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
+    public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         View root = inflater.inflate(R.layout.fragment_quakes, container, false);
@@ -80,8 +81,6 @@ public class QuakesFragment extends dagger.android.support.DaggerFragment implem
 
         setupNoQuakesView(root);
         setupSwipeRefreshLayout(root, listView);
-
-//        mViewModel.restoreState(savedInstanceState);
 
         return root;
     }
@@ -107,7 +106,7 @@ public class QuakesFragment extends dagger.android.support.DaggerFragment implem
         // The ViewModel holds an observable containing the state of the UI.
         // subscribe to the emissions of the Ui Model
         // update the view at every emission of the Ui Model
-        mSubscription.add(mViewModel.getUiModel()
+        mSubscription.add(mViewModel.getUiModel(false)
                 .subscribeOn(Schedulers.computation())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(
@@ -168,34 +167,32 @@ public class QuakesFragment extends dagger.android.support.DaggerFragment implem
     }
 
     private void forceUpdate() {
-        mSubscription.add(mViewModel.forceUpdateQuakes()
+        mSubscription.add(mViewModel.getUiModel(true)
                 .subscribeOn(Schedulers.computation())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(
-                        // onCompleted
-                        () -> {
-                            // nothing to do here
-                        },
-                        // onError
-                        error -> Log.d(TAG, "Error refreshing quakes", error)
+                        //onNext
+                        this::updateView,
+                        //onError
+                        error -> Log.d(TAG, "Error loading quakes")
                 ));
     }
 
     private void updateView(QuakesUiModel model){
         int ratesListVisibility = model.isQuakesListVisible() ? View.VISIBLE : View.GONE;
-        int noTasksViewVisibility = model.isNoQuakesViewVisible() ? View.VISIBLE : View.GONE;
+        int noQuakesViewVisibility = model.isNoQuakesViewVisible() ? View.VISIBLE : View.GONE;
         mQuakesView.setVisibility(ratesListVisibility);
-        mNoQuakesView.setVisibility(noTasksViewVisibility);
+        mNoQuakesView.setVisibility(noQuakesViewVisibility);
 
         if (model.isQuakesListVisible()) {
             showQuakes(model.getItemList());
         }
         if (model.isNoQuakesViewVisible() && model.getNoQuakesModel() != null) {
-            showNoTasks(model.getNoQuakesModel());
+            showNoQuakes(model.getNoQuakesModel());
         }
     }
 
-    private void showNoTasks(NoQuakesModel model) {
+    private void showNoQuakes(NoQuakesModel model) {
         mNoQuakesMainView.setText(model.getText());
     }
 
