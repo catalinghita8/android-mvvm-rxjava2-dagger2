@@ -3,4 +3,5 @@
     <string name="hello_blank_fragment">Hello fragment</string>
     <string name="loading_quakes_error">Error while loading quakes</string>
     <string name="no_quakes">The Quakes were lost! Our best detectives are working on it..</string>
+    <string name="quake_item_risk">Risk: </string>
 </resources>

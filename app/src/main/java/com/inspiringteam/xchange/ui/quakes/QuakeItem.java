@@ -8,22 +8,17 @@ import rx.functions.Action0;
 
 /**
  * A quake that should be displayed as an item in a list of quake.
- * Contains the quake, the action that should be triggered when taping on the item and the
- * background that should be used for this quake.
+ * Contains the quake and the action that should be triggered when taping on the item a
  */
 
 final class QuakeItem {
     private Quake mQuake;
-
-//    @DrawableRes
-//    private int mBackground;
 
     private Action0 mOnClickAction;
 
     public QuakeItem(Quake quake,
                     Action0 onClickAction) {
         mQuake = quake;
-//        mBackground = background;
         mOnClickAction = onClickAction;
     }
 
@@ -31,9 +26,6 @@ final class QuakeItem {
         return mQuake;
     }
 
-//    public int getBackground() {
-//        return mBackground;
-//    }
 
     /**
      * @return the action to be triggered on click events

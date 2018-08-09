@@ -11,7 +11,6 @@ import com.google.gson.annotations.SerializedName;
 import com.google.common.base.Objects;
 
 
-
 /**
  * Immutable model class for a Quake.
  */
@@ -37,6 +36,10 @@ public final class Quake {
     @Expose
     private Long timeStamp;
 
+    @ColumnInfo(name = "timeAdded")
+    @Expose
+    private Long timeStampAdded;
+
     @SerializedName("place")
     @ColumnInfo(name = "place")
     @Expose
@@ -58,10 +61,11 @@ public final class Quake {
         this.location = location;
     }
 
-    public Quake(@NonNull String id, Double magnitude, Long timeStamp, String location, String url, int gravity) {
+    public Quake(@NonNull String id, Double magnitude, Long timeStamp, Long timeStampAdded, String location, String url, int gravity) {
         this.id = id;
         this.magnitude = magnitude;
         this.timeStamp = timeStamp;
+        this.timeStampAdded = timeStampAdded;
         this.location = location;
         this.url = url;
         this.gravity = gravity;
@@ -91,6 +95,14 @@ public final class Quake {
         this.timeStamp = timeStamp;
     }
 
+    public Long getTimeStampAdded() {
+        return timeStampAdded;
+    }
+
+    public void setTimeStampAdded(Long timeStampAdded) {
+        this.timeStampAdded = timeStampAdded;
+    }
+
     public String getLocation() {
         return location;
     }
@@ -116,7 +128,7 @@ public final class Quake {
     }
 
     public boolean isUpToDate() {
-        return System.currentTimeMillis() - timeStamp < STALE_MS;
+        return System.currentTimeMillis() - timeStampAdded < STALE_MS;
     }
 
     @Override
@@ -126,14 +138,14 @@ public final class Quake {
 
     @Override
     public boolean equals(Object obj) {
-        if(this == obj) return true;
-        if(obj == null || getClass() != obj.getClass()) return false;
+        if (this == obj) return true;
+        if (obj == null || getClass() != obj.getClass()) return false;
 
         Quake quake = (Quake) obj;
 
         return Objects.equal(id, quake.id) &&
-                Objects.equal(magnitude, quake.magnitude)&&
-                        Objects.equal(location, quake.location);
+                Objects.equal(magnitude, quake.magnitude) &&
+                Objects.equal(location, quake.location);
     }
 
     @Override

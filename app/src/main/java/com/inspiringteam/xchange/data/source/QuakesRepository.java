@@ -6,6 +6,7 @@ import com.inspiringteam.xchange.data.models.Quake;
 import com.inspiringteam.xchange.data.source.scopes.Local;
 import com.inspiringteam.xchange.data.source.scopes.Remote;
 import com.inspiringteam.xchange.di.scopes.AppScoped;
+import com.inspiringteam.xchange.util.DisplayUtils.SortUtils;
 
 import java.util.List;
 
@@ -41,7 +42,7 @@ public class QuakesRepository implements QuakesDataSource {
 
     /**
      * The retrieval logic sets the Local Source as the primary source
-     * In case of the absence of Local database or stale data, the Remote
+     * In case of the absence of Local database or if we have stale data, the Remote
      * Source is queried and the Local one is refreshed
      */
     @NonNull
@@ -52,7 +53,7 @@ public class QuakesRepository implements QuakesDataSource {
                     if (data.isEmpty() || isStale(data)) {
                         return getFreshQuakes();
                     }
-                    return Single.just(data);
+                    return Single.just(SortUtils.sortByNewest(data));
                 });
     }
 

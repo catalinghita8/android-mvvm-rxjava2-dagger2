@@ -45,7 +45,7 @@ public class QuakesRemoteDataSource implements QuakesDataSource {
                 .flatMap(response -> Observable.fromIterable(response.quakeWrapperList).toList())
                 .flatMap(wrappersResponse -> Observable.fromIterable(wrappersResponse)
                         .map(wrapper -> {
-                            wrapper.quake.setTimeStamp(System.currentTimeMillis());
+                            wrapper.quake.setTimeStampAdded(System.currentTimeMillis());
                             return wrapper.quake;
                         }).toList());
 

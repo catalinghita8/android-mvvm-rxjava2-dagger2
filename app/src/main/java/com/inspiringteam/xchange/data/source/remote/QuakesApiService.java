@@ -10,6 +10,6 @@ import retrofit2.http.Query;
 
 
 public interface QuakesApiService {
-    @GET("all_hour.geojson")
+    @GET("1.0_day.geojson")
     Single<QuakesResponse> getQuakes();
 }

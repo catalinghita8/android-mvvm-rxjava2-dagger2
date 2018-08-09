@@ -3,4 +3,36 @@
     <color name="colorPrimary">#3F51B5</color>
     <color name="colorPrimaryDark">#303F9F</color>
     <color name="colorAccent">#FF4081</color>
+
+    // colors for gravity of quakes
+    <color name="green0">#98FB98</color>
+    <color name="green1">#90EE90</color>
+    <color name="green2">#7CFC00</color>
+    <color name="green3">#228B22</color>
+    <color name="green4">#006400</color>
+
+    <color name="yellow0">#FFFF00</color>
+
+    <color name="orange0">#FFA500</color>
+    <color name="orange1">#FF8C00</color>
+    <color name="orange2">#FF7F50</color>
+    <color name="orange3">#FF6347</color>
+    <color name="orange4">#FF4500</color>
+
+    <color name="red0">#FF0000</color>
+
+    <array name="danger_color_array">
+        <item>@color/green0</item>
+        <item>@color/green1</item>
+        <item>@color/green2</item>
+        <item>@color/green3</item>
+        <item>@color/green4</item>
+        <item>@color/yellow0</item>
+        <item>@color/orange0</item>
+        <item>@color/orange1</item>
+        <item>@color/orange2</item>
+        <item>@color/orange3</item>
+        <item>@color/orange4</item>
+        <item>@color/red0</item>
+    </array>
 </resources>
