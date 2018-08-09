@@ -1,6 +1,7 @@
 package com.inspiringteam.xchange.data.source;
 
 import android.support.annotation.NonNull;
+import android.support.annotation.VisibleForTesting;
 
 import com.inspiringteam.xchange.data.models.Quake;
 import com.inspiringteam.xchange.data.source.scopes.Local;
@@ -45,6 +46,7 @@ public class QuakesRepository implements QuakesDataSource {
      * In case of the absence of Local database or if we have stale data, the Remote
      * Source is queried and the Local one is refreshed
      */
+    // TODO ADD INTERNET ACCESS CHECKER AND LOGIC
     @NonNull
     @Override
     public Single<List<Quake>> getQuakes() {
@@ -93,6 +95,7 @@ public class QuakesRepository implements QuakesDataSource {
     /**
      * Helper methods, should be encapsulated
      */
+
     private boolean isStale(List<Quake> data) {
         return !data.get(0).isUpToDate();
     }

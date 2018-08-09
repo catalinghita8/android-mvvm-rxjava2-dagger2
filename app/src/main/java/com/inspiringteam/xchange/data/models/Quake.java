@@ -61,6 +61,14 @@ public final class Quake {
         this.location = location;
     }
 
+    @Ignore
+    public Quake(Double magnitude, String location, Long timeStamp, Long timeStampAdded) {
+        this.magnitude = magnitude;
+        this.timeStamp = timeStamp;
+        this.location = location;
+        this.timeStampAdded = timeStampAdded;
+    }
+
     public Quake(@NonNull String id, Double magnitude, Long timeStamp, Long timeStampAdded, String location, String url, int gravity) {
         this.id = id;
         this.magnitude = magnitude;
