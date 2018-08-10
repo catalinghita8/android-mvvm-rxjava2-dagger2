@@ -4,15 +4,10 @@ import android.app.Application;
 import android.content.Context;
 import android.net.ConnectivityManager;
 
-import com.inspiringteam.xchange.di.scopes.ActivityScoped;
 import com.inspiringteam.xchange.di.scopes.AppScoped;
-import com.inspiringteam.xchange.ui.quakes.QuakesActivity;
-import com.inspiringteam.xchange.ui.quakes.QuakesNavigator;
 import com.inspiringteam.xchange.util.ChromeTabsUtils.ChromeTabsWrapper;
 import com.inspiringteam.xchange.util.ConnectivityUtils.DefaultOnlineChecker;
 import com.inspiringteam.xchange.util.ConnectivityUtils.OnlineChecker;
-import com.inspiringteam.xchange.util.providers.BaseNavigator;
-import com.inspiringteam.xchange.util.providers.Navigator;
 import com.inspiringteam.xchange.util.schedulers.BaseSchedulerProvider;
 import com.inspiringteam.xchange.util.schedulers.SchedulerProvider;
 
@@ -21,11 +16,6 @@ import dagger.Provides;
 
 @Module
 public class UtilsModule {
-    @Provides
-    @AppScoped
-    QuakesNavigator provideQuakesNavigator(BaseNavigator navigationProvider) {
-        return new QuakesNavigator(navigationProvider);
-    }
 
     @Provides
     @AppScoped
@@ -43,12 +33,6 @@ public class UtilsModule {
     @AppScoped
     OnlineChecker onlineChecker(ConnectivityManager cm) {
         return new DefaultOnlineChecker(cm);
-    }
-
-    @Provides
-    @AppScoped
-    BaseNavigator provideBaseNavigator() {
-        return new Navigator();
     }
 
     @AppScoped

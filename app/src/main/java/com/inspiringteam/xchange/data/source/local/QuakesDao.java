@@ -38,7 +38,7 @@ public interface QuakesDao {
      *
      * @param Quake to be inserted.
      */
-    @Insert(onConflict = OnConflictStrategy.IGNORE)
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
     void insertQuake(Quake Quake);
 
     /**
