@@ -7,6 +7,7 @@ import com.inspiringteam.xchange.data.models.Quake;
 import com.inspiringteam.xchange.data.source.scopes.Local;
 import com.inspiringteam.xchange.data.source.scopes.Remote;
 import com.inspiringteam.xchange.di.scopes.AppScoped;
+import com.inspiringteam.xchange.util.ConnectivityUtils.OnlineChecker;
 import com.inspiringteam.xchange.util.DisplayUtils.SortUtils;
 
 import java.util.List;
@@ -28,6 +29,8 @@ public class QuakesRepository implements QuakesDataSource {
 
     private final QuakesDataSource mQuakesLocalDataSource;
 
+    private final OnlineChecker mOnlineChecker;
+
     /**
      * Dagger allows us to have a single instance of the repository throughout the app
      *
@@ -36,15 +39,17 @@ public class QuakesRepository implements QuakesDataSource {
      */
     @Inject
     public QuakesRepository(@Remote QuakesDataSource quakesRemoteDataSource,
-                            @Local QuakesDataSource quakesLocalDataSource) {
+                            @Local QuakesDataSource quakesLocalDataSource,
+                            OnlineChecker onlineChecker) {
         mQuakesRemoteDataSource = quakesRemoteDataSource;
         mQuakesLocalDataSource = quakesLocalDataSource;
+        mOnlineChecker = onlineChecker;
     }
 
     /**
      * The retrieval logic sets the Local Source as the primary source
-     * In case of the absence of Local database or if we have stale data, the Remote
-     * Source is queried and the Local one is refreshed
+     * In case of an active internet connection and the absence of Local database
+     * or if it contains stale data, the Remote Source is queried and the Local one is refreshed
      */
     // TODO ADD INTERNET ACCESS CHECKER AND LOGIC
     @NonNull
@@ -52,7 +57,7 @@ public class QuakesRepository implements QuakesDataSource {
     public Single<List<Quake>> getQuakes() {
         return mQuakesLocalDataSource.getQuakes()
                 .flatMap(data -> {
-                    if (data.isEmpty() || isStale(data)) {
+                    if (mOnlineChecker.isOnline() && (data.isEmpty() || isStale(data))) {
                         return getFreshQuakes();
                     }
                     return Single.just(SortUtils.sortByNewest(data));
@@ -97,6 +102,7 @@ public class QuakesRepository implements QuakesDataSource {
      */
 
     private boolean isStale(List<Quake> data) {
+        // it is enough for 1 item to be stale
         return !data.get(0).isUpToDate();
     }
 

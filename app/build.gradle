@@ -105,6 +105,9 @@ dependencies {
     implementation "com.google.code.gson:gson:$rootProject.gsonVersion"
     implementation "com.squareup.retrofit2:converter-gson:$rootProject.gsonConverterVersion"
 
+    // Chrome Custom Tabs dependencies
+    implementation "com.android.support:customtabs:$rootProject.supportCustomTabsVersion"
+
     // Dependencies for local unit tests
     testImplementation "junit:junit:$rootProject.ext.junitVersion"
     testImplementation "org.mockito:mockito-all:$rootProject.ext.mockitoVersion"

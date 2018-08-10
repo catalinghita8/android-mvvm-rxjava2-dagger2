@@ -2,6 +2,7 @@ package com.inspiringteam.xchange.ui.quakes;
 
 import com.inspiringteam.xchange.di.scopes.ActivityScoped;
 import com.inspiringteam.xchange.di.scopes.FragmentScoped;
+import com.inspiringteam.xchange.util.ChromeTabsUtils.ChromeTabsWrapper;
 import com.inspiringteam.xchange.util.providers.BaseResourceProvider;
 import com.inspiringteam.xchange.util.providers.ResourceProvider;
 

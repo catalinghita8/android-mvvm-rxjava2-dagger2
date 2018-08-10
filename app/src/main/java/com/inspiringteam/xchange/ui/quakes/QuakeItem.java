@@ -11,7 +11,7 @@ import rx.functions.Action0;
  * Contains the quake and the action that should be triggered when taping on the item a
  */
 
-final class QuakeItem {
+final public class QuakeItem {
     private Quake mQuake;
 
     private Action0 mOnClickAction;

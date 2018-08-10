@@ -8,6 +8,7 @@ import com.inspiringteam.xchange.R;
 import com.inspiringteam.xchange.data.models.Quake;
 import com.inspiringteam.xchange.data.source.QuakesRepository;
 import com.inspiringteam.xchange.di.scopes.AppScoped;
+import com.inspiringteam.xchange.util.ChromeTabsUtils.ChromeTabsWrapper;
 import com.inspiringteam.xchange.util.schedulers.BaseSchedulerProvider;
 
 import java.util.List;
@@ -28,12 +29,10 @@ import io.reactivex.subjects.PublishSubject;
 @AppScoped
 public final class QuakesViewModel extends ViewModel {
     private static final String TAG = QuakesViewModel.class.getSimpleName();
+    private final ChromeTabsWrapper mTabsWrapper;
 
     @NonNull
     private final QuakesRepository mRepository;
-
-    @NonNull
-    private final QuakesNavigator mNavigator;
 
     // using a BehaviourSubject because we are interested in the last object that was emitted before
     // subscribing. Like this we ensure that the loading indicator has the correct visibility.
@@ -46,14 +45,13 @@ public final class QuakesViewModel extends ViewModel {
 
     @Inject
     public QuakesViewModel(@NonNull QuakesRepository ratesRepository,
-                           @NonNull QuakesNavigator navigationProvider) {
-        mNavigator = navigationProvider;
+                           @NonNull ChromeTabsWrapper tabsWrapper) {
         mRepository = ratesRepository;
+        mTabsWrapper = tabsWrapper;
 
-        mLoadingIndicatorSubject = BehaviorSubject.create();
+        mLoadingIndicatorSubject = BehaviorSubject.createDefault(false);
         mSnackbarText = PublishSubject.create();
     }
-
 
     /**
      * @return the model for the quakes screen
@@ -74,7 +72,7 @@ public final class QuakesViewModel extends ViewModel {
      */
     private Single<List<QuakeItem>> getQuakeItems(boolean isForcedCall) {
         // TODO find better optimized mechanism to triggering remote data retrieval
-        if(isForcedCall) mRepository.deleteAllQuakes();
+        if (isForcedCall) mRepository.deleteAllQuakes();
 
         return mRepository.getQuakes()
                 .flatMap(list -> Observable.fromIterable(list)
@@ -119,7 +117,15 @@ public final class QuakesViewModel extends ViewModel {
     }
 
     private void handleQuakeClicked(Quake quake) {
-        // TODO - define actions
-        mNavigator.addNewAction();
+        mTabsWrapper.openCustomtab(quake.getUrl());
+
+    }
+
+    public void bindTabsService(){
+        mTabsWrapper.unbindCustomTabsService();
+    }
+
+    public void unbindTabsService(){
+        mTabsWrapper.unbindCustomTabsService();
     }
 }

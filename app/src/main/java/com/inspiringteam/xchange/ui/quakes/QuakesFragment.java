@@ -139,11 +139,15 @@ public class QuakesFragment extends dagger.android.support.DaggerFragment implem
                         //onError
                         error -> Log.d(TAG, "Error showing loading indicator", error)
                 ));
+
+        // bind tabs service
+        mViewModel.bindTabsService();
     }
 
     @Override
     public void unbindViewModel() {
-
+        // don't forget to unbind tabs service
+        mViewModel.unbindTabsService();
     }
 
     private void setupNoQuakesView(View view) {

@@ -56,6 +56,19 @@ public final class Quake {
     private int gravity;
 
     @Ignore
+    public Quake(String id, String location) {
+        this.id = id;
+        this.location = location;
+    }
+
+    @Ignore
+    public Quake(String id, String location, String url) {
+        this.id = id;
+        this.location = location;
+        this.url = url;
+    }
+
+    @Ignore
     public Quake(Double magnitude, String location) {
         this.magnitude = magnitude;
         this.location = location;
