@@ -5,6 +5,7 @@ import android.support.annotation.NonNull;
 import com.inspiringteam.xchange.data.models.Quake;
 import com.inspiringteam.xchange.data.source.QuakesDataSource;
 import com.inspiringteam.xchange.di.scopes.AppScoped;
+import com.inspiringteam.xchange.util.schedulers.BaseSchedulerProvider;
 
 
 import java.util.List;
@@ -26,10 +27,16 @@ import static com.google.common.base.Preconditions.checkNotNull;
 public class QuakesLocalDataSource implements QuakesDataSource {
     private final QuakesDao mQuakesDao;
 
+    private BaseSchedulerProvider mSchedulerProvider;
+
     @Inject
-    public QuakesLocalDataSource(@NonNull QuakesDao quakesDao) {
+    public QuakesLocalDataSource(@NonNull QuakesDao quakesDao,
+                                 @NonNull BaseSchedulerProvider schedulerProvider) {
+        checkNotNull(schedulerProvider, "scheduleProvider cannot be null");
         checkNotNull(quakesDao, "quakesDao cannot be null");
+
         mQuakesDao = quakesDao;
+        mSchedulerProvider = schedulerProvider;
     }
 
 
@@ -59,17 +66,18 @@ public class QuakesLocalDataSource implements QuakesDataSource {
     public void saveQuake(@NonNull Quake quake) {
         checkNotNull(quake);
         Completable.fromRunnable(() -> mQuakesDao.insertQuake(quake))
-                .subscribeOn(Schedulers.io()).subscribe();
+                .subscribeOn(mSchedulerProvider.io()).subscribe();
     }
 
     @Override
     public void deleteAllQuakes() {
-        Completable.fromRunnable(mQuakesDao::deleteQuakes).subscribeOn(Schedulers.io()).subscribe();
+        Completable.fromRunnable(mQuakesDao::deleteQuakes)
+                .subscribeOn(mSchedulerProvider.io()).subscribe();
     }
 
     @Override
     public void deleteQuake(@NonNull String quakeId) {
         Completable.fromRunnable(() -> mQuakesDao.deleteQuakeById(quakeId))
-                .subscribeOn(Schedulers.io()).subscribe();
+                .subscribeOn(mSchedulerProvider.io()).subscribe();
     }
 }

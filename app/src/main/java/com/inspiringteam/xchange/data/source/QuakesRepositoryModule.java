@@ -20,8 +20,9 @@ public class QuakesRepositoryModule {
     @Provides
     @Local
     @AppScoped
-    QuakesDataSource provideQuakesLocalDataSource(QuakesDao quakesDao) {
-        return new QuakesLocalDataSource(quakesDao);
+    QuakesDataSource provideQuakesLocalDataSource(QuakesDao quakesDao,
+                                                  BaseSchedulerProvider schedulerProvider) {
+        return new QuakesLocalDataSource(quakesDao, schedulerProvider);
     }
 
     @Provides
