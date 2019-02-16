@@ -1,6 +1,6 @@
 package com.inspiringteam.xchange.data.source.local;
 
-import android.support.annotation.NonNull;
+import androidx.annotation.NonNull;
 
 import com.inspiringteam.xchange.data.models.Quake;
 import com.inspiringteam.xchange.data.source.QuakesDataSource;
@@ -16,7 +16,6 @@ import javax.inject.Inject;
 
 import io.reactivex.Completable;
 import io.reactivex.Single;
-import io.reactivex.schedulers.Schedulers;
 
 import static com.google.common.base.Preconditions.checkNotNull;
 

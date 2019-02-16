@@ -1,6 +1,6 @@
 package com.inspiringteam.xchange.ui.quakes;
 
-import android.support.annotation.DrawableRes;
+import androidx.annotation.DrawableRes;
 
 import com.inspiringteam.xchange.data.models.Quake;
 

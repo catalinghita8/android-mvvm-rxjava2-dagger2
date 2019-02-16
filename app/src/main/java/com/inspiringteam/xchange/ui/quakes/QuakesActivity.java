@@ -22,7 +22,7 @@ public class QuakesActivity extends DaggerAppCompatActivity {
         QuakesFragment fragment = (QuakesFragment) getSupportFragmentManager().findFragmentById(R.id.contentFrame);
         if (fragment == null) {
             fragment = mInjectedFragment;
-            ActivityUtils.addFragmentToActivity(getSupportFragmentManager(), fragment, R.id.contentFrame);
+            ActivityUtils.INSTANCE.addFragmentToActivity(getSupportFragmentManager(), fragment, R.id.contentFrame);
         }
     }
 }

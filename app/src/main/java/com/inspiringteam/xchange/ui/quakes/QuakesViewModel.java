@@ -1,21 +1,19 @@
 package com.inspiringteam.xchange.ui.quakes;
 
-import android.arch.lifecycle.ViewModel;
-import android.support.annotation.NonNull;
-import android.support.v4.util.Pair;
+import androidx.lifecycle.ViewModel;
+import androidx.annotation.NonNull;
+import androidx.core.util.Pair;
 
 import com.inspiringteam.xchange.R;
 import com.inspiringteam.xchange.data.models.Quake;
 import com.inspiringteam.xchange.data.source.QuakesRepository;
 import com.inspiringteam.xchange.di.scopes.AppScoped;
 import com.inspiringteam.xchange.util.ChromeTabsUtils.ChromeTabsWrapper;
-import com.inspiringteam.xchange.util.schedulers.BaseSchedulerProvider;
 
 import java.util.List;
 
 import javax.inject.Inject;
 
-import io.reactivex.Completable;
 import io.reactivex.Observable;
 import io.reactivex.Single;
 import io.reactivex.subjects.BehaviorSubject;

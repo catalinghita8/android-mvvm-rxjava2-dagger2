@@ -2,10 +2,10 @@ package com.inspiringteam.xchange.util.ChromeTabsUtils;
 
 import android.content.Context;
 import android.net.Uri;
-import android.support.customtabs.CustomTabsClient;
-import android.support.customtabs.CustomTabsIntent;
-import android.support.customtabs.CustomTabsServiceConnection;
-import android.support.v4.content.ContextCompat;
+import androidx.browser.customtabs.CustomTabsClient;
+import androidx.browser.customtabs.CustomTabsIntent;
+import androidx.browser.customtabs.CustomTabsServiceConnection;
+import androidx.core.content.ContextCompat;
 import com.inspiringteam.xchange.R;
 
 

@@ -1,8 +1,9 @@
 apply plugin: 'com.android.application'
+apply plugin: 'kotlin-android-extensions'
+apply plugin: 'kotlin-android'
 
 android {
     compileSdkVersion rootProject.ext.compileSdkVersion
-    buildToolsVersion rootProject.ext.buildToolsVersion
 
     defaultConfig {
         applicationId "com.inspiringteam.xchange"
@@ -10,7 +11,8 @@ android {
         targetSdkVersion rootProject.ext.targetSdkVersion
         versionCode 1
         versionName "1.0"
-        testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
+        testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
+        multiDexEnabled true
     }
 
     compileOptions {
@@ -68,18 +70,18 @@ android {
 
 dependencies {
     // App's dependencies, including test
-    implementation "com.android.support:appcompat-v7:$rootProject.supportLibraryVersion"
-    implementation "com.android.support:cardview-v7:$rootProject.supportLibraryVersion"
-    implementation "com.android.support:design:$rootProject.supportLibraryVersion"
-    implementation "com.android.support:recyclerview-v7:$rootProject.supportLibraryVersion"
-    implementation "com.android.support:support-v4:$rootProject.supportLibraryVersion"
-    implementation "com.android.support.constraint:constraint-layout:$rootProject.constraintLayout"
+    implementation "androidx.appcompat:appcompat:$rootProject.androidxVersion"
+    implementation "androidx.cardview:cardview:$rootProject.supportLibraryVersion"
+    implementation "com.google.android.material:material:$rootProject.supportLibraryVersion"
+    implementation "androidx.recyclerview:recyclerview:$rootProject.supportLibraryVersion"
+    implementation "androidx.legacy:legacy-support-v4:$rootProject.supportLibraryVersion"
+    implementation "androidx.constraintlayout:constraintlayout:$rootProject.constraintLayout"
     implementation "com.google.guava:guava:$rootProject.guavaVersion"
 
-    implementation "android.arch.persistence.room:rxjava2:$rootProject.roomVersion"
-    implementation "android.arch.persistence.room:runtime:$rootProject.roomVersion"
-    annotationProcessor "android.arch.persistence.room:compiler:$rootProject.roomVersion"
-    androidTestImplementation "android.arch.persistence.room:testing:$rootProject.roomVersion"
+    implementation "androidx.room:room-rxjava2:$rootProject.roomVersion"
+    implementation "androidx.room:room-runtime:$rootProject.roomVersion"
+    annotationProcessor "androidx.room:room-compiler:$rootProject.roomVersion"
+    androidTestImplementation "androidx.room:room-testing:$rootProject.roomVersion"
 
     // Dagger dependencies
     annotationProcessor "com.google.dagger:dagger-compiler:$rootProject.daggerVersion"
@@ -90,9 +92,9 @@ dependencies {
     annotationProcessor "com.google.dagger:dagger-android-processor:$rootProject.daggerVersion"
 
     // Android Architecture components dependencies
-    implementation "android.arch.lifecycle:runtime:$arch_version"
-    implementation "android.arch.lifecycle:extensions:$arch_version"
-    annotationProcessor "android.arch.lifecycle:compiler:$arch_version"
+    implementation "androidx.lifecycle:lifecycle-runtime:$arch_version"
+    implementation "androidx.lifecycle:lifecycle-extensions:$arch_version"
+    annotationProcessor "androidx.lifecycle:lifecycle-compiler:$arch_version"
 
     // RxJava dependencies
     implementation "io.reactivex.rxjava2:rxandroid:$rootProject.rxandroidVersion"
@@ -106,7 +108,7 @@ dependencies {
     implementation "com.squareup.retrofit2:converter-gson:$rootProject.gsonConverterVersion"
 
     // Chrome Custom Tabs dependencies
-    implementation "com.android.support:customtabs:$rootProject.supportCustomTabsVersion"
+    implementation "androidx.browser:browser:$rootProject.supportCustomTabsVersion"
 
     // Dependencies for local unit tests
     testImplementation "junit:junit:$rootProject.ext.junitVersion"
@@ -114,8 +116,8 @@ dependencies {
     testImplementation "org.hamcrest:hamcrest-all:$rootProject.ext.hamcrestVersion"
 
     // Android Testing Support Library's runner and rules
-    androidTestImplementation "com.android.support.test:runner:$rootProject.ext.runnerVersion"
-    androidTestImplementation "com.android.support.test:rules:$rootProject.ext.runnerVersion"
+    androidTestImplementation "androidx.test:runner:$rootProject.ext.runnerVersion"
+    androidTestImplementation "androidx.test:rules:$rootProject.ext.runnerVersion"
 
     // Dependencies for Android unit tests
     androidTestImplementation "junit:junit:$rootProject.ext.junitVersion"
@@ -124,25 +126,29 @@ dependencies {
     androidTestImplementation 'com.google.dexmaker:dexmaker-mockito:1.2'
 
     // Espresso UI Testing
-    androidTestImplementation "com.android.support.test.espresso:espresso-core:$rootProject.espressoVersion"
-    androidTestImplementation "com.android.support.test.espresso:espresso-contrib:$rootProject.espressoVersion"
-    androidTestImplementation "com.android.support.test.espresso:espresso-intents:$rootProject.espressoVersion"
-    implementation "com.android.support.test.espresso:espresso-idling-resource:$rootProject.espressoVersion"
+    androidTestImplementation "androidx.test.espresso:espresso-core:$rootProject.espressoVersion"
+    androidTestImplementation "androidx.test.espresso:espresso-contrib:$rootProject.espressoVersion"
+    androidTestImplementation "androidx.test.espresso:espresso-intents:$rootProject.espressoVersion"
+    implementation "androidx.test.espresso:espresso-idling-resource:$rootProject.espressoVersion"
 
     // Resolve conflicts between main and test APK:
-    androidTestImplementation "com.android.support:support-annotations:$rootProject.supportLibraryVersion"
-    androidTestImplementation "com.android.support:support-v4:$rootProject.supportLibraryVersion"
-    androidTestImplementation "com.android.support:recyclerview-v7:$rootProject.supportLibraryVersion"
-    androidTestImplementation "com.android.support:appcompat-v7:$rootProject.supportLibraryVersion"
-    androidTestImplementation "com.android.support:design:$rootProject.supportLibraryVersion"
-    androidTestImplementation "com.google.code.findbugs:jsr305:3.0.1"
+    androidTestImplementation "androidx.annotation:annotation:$rootProject.supportLibraryVersion"
+    androidTestImplementation "androidx.legacy:legacy-support-v4:$rootProject.supportLibraryVersion"
+    androidTestImplementation "androidx.recyclerview:recyclerview:$rootProject.supportLibraryVersion"
+    androidTestImplementation "androidx.appcompat:appcompat:$rootProject.androidxVersion"
+    androidTestImplementation "com.google.android.material:material:$rootProject.supportLibraryVersion"
+    androidTestImplementation "com.google.code.findbugs:jsr305:3.0.2"
 
-    testImplementation ("android.arch.core:core-testing:$arch_version", {
+    testImplementation ("androidx.arch.core:core-testing:$arch_testing", {
         exclude group: 'com.android.support', module: 'support-compat'
         exclude group: 'com.android.support', module: 'support-annotations'
         exclude group: 'com.android.support', module: 'support-core-utils'
     })
 
-    androidTestImplementation("android.arch.core:core-testing:$arch_version", {
+    androidTestImplementation("androidx.arch.core:core-testing:$arch_testing", {
     })
+    implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
+}
+repositories {
+    mavenCentral()
 }

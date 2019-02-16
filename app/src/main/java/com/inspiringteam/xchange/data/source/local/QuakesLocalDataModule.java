@@ -2,12 +2,10 @@ package com.inspiringteam.xchange.data.source.local;
 
 
 import android.app.Application;
-import android.arch.persistence.room.Room;
+import androidx.room.Room;
 
 import com.inspiringteam.xchange.di.scopes.AppScoped;
 import com.inspiringteam.xchange.util.Constants;
-import com.inspiringteam.xchange.util.schedulers.BaseSchedulerProvider;
-import com.inspiringteam.xchange.util.schedulers.SchedulerProvider;
 
 import dagger.Module;
 import dagger.Provides;

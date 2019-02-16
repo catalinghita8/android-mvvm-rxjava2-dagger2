@@ -1,7 +1,7 @@
 package com.inspiringteam.xchange.data.source;
 
-import android.support.annotation.NonNull;
-import android.support.annotation.VisibleForTesting;
+import androidx.annotation.NonNull;
+import androidx.annotation.VisibleForTesting;
 
 import com.inspiringteam.xchange.data.models.Quake;
 import com.inspiringteam.xchange.data.source.scopes.Local;

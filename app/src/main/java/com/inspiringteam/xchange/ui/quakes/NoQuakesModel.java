@@ -1,6 +1,6 @@
 package com.inspiringteam.xchange.ui.quakes;
 
-import android.support.annotation.StringRes;
+import androidx.annotation.StringRes;
 
 /**
  * The string  that should be displayed when there are no quakes.

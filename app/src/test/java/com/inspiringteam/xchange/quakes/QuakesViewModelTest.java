@@ -1,6 +1,6 @@
 package com.inspiringteam.xchange.quakes;
 
-import android.support.annotation.DrawableRes;
+import androidx.annotation.DrawableRes;
 
 import com.google.common.collect.Lists;
 import com.inspiringteam.xchange.R;
@@ -19,11 +19,8 @@ import org.mockito.MockitoAnnotations;
 import java.util.ArrayList;
 import java.util.List;
 
-import io.reactivex.Observable;
 import io.reactivex.Single;
 import io.reactivex.observers.TestObserver;
-import io.reactivex.subscribers.TestSubscriber;
-import rx.Completable;
 
 
 import static org.junit.Assert.assertEquals;
