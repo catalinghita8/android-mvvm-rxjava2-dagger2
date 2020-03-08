@@ -1,6 +1,7 @@
 package com.inspiringteam.xchange.util.ChromeTabsUtils;
 
 import android.content.Context;
+import android.content.Intent;
 import android.net.Uri;
 import androidx.browser.customtabs.CustomTabsClient;
 import androidx.browser.customtabs.CustomTabsIntent;
@@ -26,6 +27,7 @@ public class ChromeTabsWrapper implements ServiceConnectionCallback {
         builder.setExitAnimations(mContext, R.anim.fade_in, R.anim.fade_out);
         builder.setToolbarColor(ContextCompat.getColor(mContext, R.color.colorPrimary));
         CustomTabsIntent customTabsIntent = builder.build();
+        customTabsIntent.intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
         customTabsIntent.launchUrl(mContext, Uri.parse(url));
     }
 
