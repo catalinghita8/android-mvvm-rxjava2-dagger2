@@ -9,7 +9,7 @@
         android:label="@string/app_name"
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
-        android:name=".Application"
+        android:name=".App"
         android:theme="@style/AppTheme">
         <activity android:name=".ui.quakes.QuakesActivity">
             <intent-filter>

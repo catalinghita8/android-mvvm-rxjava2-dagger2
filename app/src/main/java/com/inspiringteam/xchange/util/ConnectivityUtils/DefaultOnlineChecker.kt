@@ -1,24 +1,13 @@
-package com.inspiringteam.xchange.util.ConnectivityUtils;
+package com.inspiringteam.xchange.util.ConnectivityUtils
 
-import android.net.ConnectivityManager;
-import android.net.NetworkInfo;
+import android.net.ConnectivityManager
 
 /**
  * Custom OnlineChecker
  */
-
-public class DefaultOnlineChecker implements OnlineChecker {
-
-    private final ConnectivityManager connectivityManager;
-
-    public DefaultOnlineChecker(ConnectivityManager connectivityManager) {
-        this.connectivityManager = connectivityManager;
+class DefaultOnlineChecker(private val connectivityManager: ConnectivityManager) : OnlineChecker {
+    override fun isOnline(): Boolean {
+        val netInfo = connectivityManager.activeNetworkInfo
+        return netInfo != null && netInfo.isConnectedOrConnecting
     }
-
-    @Override
-    public boolean isOnline() {
-        NetworkInfo netInfo = connectivityManager.getActiveNetworkInfo();
-        return netInfo != null && netInfo.isConnectedOrConnecting();
-    }
-
 }

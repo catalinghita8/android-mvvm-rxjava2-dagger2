@@ -1,7 +1,5 @@
 package com.inspiringteam.xchange.quakes;
 
-import androidx.annotation.DrawableRes;
-
 import com.google.common.collect.Lists;
 import com.inspiringteam.xchange.R;
 import com.inspiringteam.xchange.data.models.Quake;
@@ -9,7 +7,7 @@ import com.inspiringteam.xchange.data.source.QuakesRepository;
 import com.inspiringteam.xchange.ui.quakes.QuakeItem;
 import com.inspiringteam.xchange.ui.quakes.QuakesUiModel;
 import com.inspiringteam.xchange.ui.quakes.QuakesViewModel;
-import com.inspiringteam.xchange.util.ChromeTabsUtils.ChromeTabsWrapper;
+import com.inspiringteam.xchange.util.chromeTabsUtils.ChromeTabsWrapper;
 
 import org.junit.Before;
 import org.junit.Test;
@@ -92,7 +90,7 @@ public class QuakesViewModelTest {
         when(mQuakesRepository.getQuakes()).thenReturn(Single.error(new RuntimeException()));
 
         // Given that we are subscribed to the snackbar text
-        mViewModel.getSnackbarMessage().subscribe(mSnackbarTextSubscriber);
+        mViewModel.getSnackBarMessage().subscribe(mSnackbarTextSubscriber);
 
         // When subscribed to the quakes model
         mViewModel.getUiModel(false).subscribe(mQuakesSubscriber);
@@ -131,7 +129,7 @@ public class QuakesViewModelTest {
         // Given a quake
         withQuakeInRepositoryAndSubscribed(tempQuake);
         // And list of quake items is emitted
-        List<QuakeItem> items = mQuakesSubscriber.values().get(0).getItemList();
+        List<QuakeItem> items = mQuakesSubscriber.values().get(0).getQuakes();
         QuakeItem QuakeItem = items.get(0);
 
         // When triggering the click action
@@ -149,7 +147,7 @@ public class QuakesViewModelTest {
 
     private void assertQuakesModelWithQuakesVisible(QuakesUiModel model) {
         assertTrue(model.isQuakesListVisible());
-        assertQuakeItems(model.getItemList());
+        assertQuakeItems(model.getQuakes());
         assertFalse(model.isNoQuakesViewVisible());
         assertNull(model.getNoQuakesModel());
     }

@@ -1,18 +1,17 @@
-package com.inspiringteam.xchange.util.ChromeTabsUtils;
+package com.inspiringteam.xchange.util.chromeTabsUtils
 
-import androidx.browser.customtabs.CustomTabsClient;
+import androidx.browser.customtabs.CustomTabsClient
 
-
-public interface ServiceConnectionCallback {
+interface ServiceConnectionCallback {
     /**
      * Called when the service is connected.
      *
      * @param client a CustomTabsClient
      */
-    void onServiceConnected(CustomTabsClient client);
+    fun onServiceConnected(client: CustomTabsClient)
 
     /**
      * Called when the service is disconnected.
      */
-    void onServiceDisconnected();
+    fun onServiceDisconnected()
 }

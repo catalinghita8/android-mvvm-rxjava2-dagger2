@@ -1,47 +1,36 @@
-package com.inspiringteam.xchange.util.schedulers;
+package com.inspiringteam.xchange.util.schedulers
 
-import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
-
-import io.reactivex.Scheduler;
-import io.reactivex.android.schedulers.AndroidSchedulers;
-import io.reactivex.schedulers.Schedulers;
-
+import io.reactivex.Scheduler
+import io.reactivex.android.schedulers.AndroidSchedulers
+import io.reactivex.schedulers.Schedulers
 
 /**
  * Provides different types of schedulers.
  */
-public class SchedulerProvider implements BaseSchedulerProvider {
-
-    @Nullable
-    private static SchedulerProvider INSTANCE;
-
-    // Prevent direct instantiation.
-    private SchedulerProvider() {
+class SchedulerProvider  // Prevent direct instantiation.
+private constructor() : BaseSchedulerProvider {
+    override fun computation(): Scheduler {
+        return Schedulers.computation()
     }
 
-    public static synchronized SchedulerProvider getInstance() {
-        if (INSTANCE == null) {
-            INSTANCE = new SchedulerProvider();
-        }
-        return INSTANCE;
+    override fun io(): Scheduler {
+        return Schedulers.io()
     }
 
-    @Override
-    @NonNull
-    public Scheduler computation() {
-        return Schedulers.computation();
+    override fun ui(): Scheduler {
+        return AndroidSchedulers.mainThread()
     }
 
-    @Override
-    @NonNull
-    public Scheduler io() {
-        return Schedulers.io();
-    }
+    companion object {
+        private var INSTANCE: SchedulerProvider? = null
 
-    @Override
-    @NonNull
-    public Scheduler ui() {
-        return AndroidSchedulers.mainThread();
+        @get:Synchronized
+        val instance: SchedulerProvider
+            get() {
+                if (INSTANCE == null) {
+                    INSTANCE = SchedulerProvider()
+                }
+                return INSTANCE!!
+            }
     }
 }

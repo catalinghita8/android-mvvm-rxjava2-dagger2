@@ -1,21 +1,12 @@
-package com.inspiringteam.xchange.util.schedulers;
+package com.inspiringteam.xchange.util.schedulers
 
-import androidx.annotation.NonNull;
-
-import io.reactivex.Scheduler;
-
+import io.reactivex.Scheduler
 
 /**
- * Allow providing different types of {@link Scheduler}s.
+ * Allow providing different types of [Scheduler]s.
  */
-public interface BaseSchedulerProvider {
-
-    @NonNull
-    Scheduler computation();
-
-    @NonNull
-    Scheduler io();
-
-    @NonNull
-    Scheduler ui();
+interface BaseSchedulerProvider {
+    fun computation(): Scheduler
+    fun io(): Scheduler
+    fun ui(): Scheduler
 }

@@ -1,30 +1,26 @@
-package com.inspiringteam.xchange.util.ChromeTabsUtils;
+package com.inspiringteam.xchange.util.chromeTabsUtils
 
-import android.content.ComponentName;
-import androidx.browser.customtabs.CustomTabsClient;
-import androidx.browser.customtabs.CustomTabsServiceConnection;
+import android.content.ComponentName
+import androidx.browser.customtabs.CustomTabsClient
+import androidx.browser.customtabs.CustomTabsServiceConnection
+import java.lang.ref.WeakReference
 
-import java.lang.ref.WeakReference;
-
-
-
-public class ServiceConnection extends CustomTabsServiceConnection {
+class ServiceConnection(connectionCallback: ServiceConnectionCallback) :
+    CustomTabsServiceConnection() {
     // A weak reference to the ServiceConnectionCallback to avoid leaking it.
-    private WeakReference<ServiceConnectionCallback> mConnectionCallback;
+    private val mConnectionCallback: WeakReference<ServiceConnectionCallback>
 
-    public ServiceConnection(ServiceConnectionCallback connectionCallback) {
-        mConnectionCallback = new WeakReference<>(connectionCallback);
+    override fun onCustomTabsServiceConnected(name: ComponentName, client: CustomTabsClient) {
+        val connectionCallback = mConnectionCallback.get()
+        connectionCallback?.onServiceConnected(client)
     }
 
-    @Override
-    public void onCustomTabsServiceConnected(ComponentName name, CustomTabsClient client) {
-        ServiceConnectionCallback connectionCallback = mConnectionCallback.get();
-        if (connectionCallback != null) connectionCallback.onServiceConnected(client);
+    override fun onServiceDisconnected(name: ComponentName) {
+        val connectionCallback = mConnectionCallback.get()
+        connectionCallback?.onServiceDisconnected()
     }
 
-    @Override
-    public void onServiceDisconnected(ComponentName name) {
-        ServiceConnectionCallback connectionCallback = mConnectionCallback.get();
-        if (connectionCallback != null) connectionCallback.onServiceDisconnected();
+    init {
+        mConnectionCallback = WeakReference(connectionCallback)
     }
 }
