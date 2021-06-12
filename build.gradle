@@ -48,7 +48,7 @@ ext {
     runnerVersion = '1.1.0-alpha4'
     daggerVersion = '2.16'
     rulesVersion = '0.5'
-    roomVersion = '2.1.0-alpha04'
+    roomVersion = '2.4.0-alpha01'
     espressoVersion = '3.1.2-alpha01'
     retrofitClientVersion = '2.3.0'
     retrofitAdapterRxJavaVersion = '2.3.0'
