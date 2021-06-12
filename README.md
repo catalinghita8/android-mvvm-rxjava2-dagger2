@@ -1,5 +1,7 @@
 # Android-MVVM-RxJava2-Dagger2
 
+## ! Sample has been migrated to Kotlin.
+
 This repository contains a detailed sample application that uses MVVM as its presentation layer pattern. **The app aims to be extremely flexible to creating variants for automated and manual testing.** Also, the project implements and follows the guidelines presented in Google Sample [MVVM+RXJAVA-android](https://github.com/googlesamples/android-architecture/tree/dev-todo-mvvm-rxjava/).
 
 Essential dependencies are Dagger2 with Dagger-android, RxJava2 with RxAndroid, Room, Retrofit and Espresso. Other noteworthy dependencies would be Mockito, Chrome CustomTabs and Guava.
@@ -39,10 +41,10 @@ Even in this case, we are able to notice RxJava's benefits when data is being re
 ## Dependency Injection
 Dagger2 is used to externalize the creation of dependencies from the classes that use them. Android specific helpers are provided by `Dagger-Android` and the most significant advantage is that they generate a subcomponent for each `Activity` through a new code generator.
 Such subcomponent is:
-```java
+```kotlin
 @ActivityScoped
-@ContributesAndroidInjector(modules = QuakesModule.class)
-abstract QuakesActivity quakesActivity(); 
+@ContributesAndroidInjector(modules = [QuakesModule::class])
+abstract fun quakesActivity(): QuakesActivity?
 ```
 The below diagram illustrates the most significant relations between components and modules. An important note is the fact that the ViewModel is now `@AppScoped` whereas in MVP the Presenter is `@ActivityScoped` - this is mainly due to the fact that in MVVM the ViewModel is a Android Architecture Component so therefore has a greater scope  than Views. You can also get a quick glance on how annotations help us define custom Scopes in order to properly handle classes instantiation.
 ![Dependecy](https://github.com/catalinghita8/android-mvvm-rxjava-dagger2/blob/master/readme_pics/mvvm_dagger_dependency.png)
