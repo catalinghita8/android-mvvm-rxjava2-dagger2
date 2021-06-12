@@ -1,11 +1,10 @@
-package com.inspiringteam.xchange.di;
+package com.inspiringteam.xchange.di
 
-import com.inspiringteam.xchange.ui.quakes.QuakesActivity;
-import com.inspiringteam.xchange.di.scopes.ActivityScoped;
-import com.inspiringteam.xchange.ui.quakes.QuakesModule;
-
-import dagger.Module;
-import dagger.android.ContributesAndroidInjector;
+import com.inspiringteam.xchange.di.scopes.ActivityScoped
+import com.inspiringteam.xchange.ui.quakes.QuakesActivity
+import com.inspiringteam.xchange.ui.quakes.QuakesModule
+import dagger.Module
+import dagger.android.ContributesAndroidInjector
 
 /**
  * We want Dagger.Android to create a Subcomponent which has a parent Component of
@@ -17,8 +16,8 @@ import dagger.android.ContributesAndroidInjector;
  * In this case, when Dagger.Android annotation processor runs it will create 1 subcomponent for us
  */
 @Module
-public abstract class ActivityBindingModule {
+abstract class ActivityBindingModule {
     @ActivityScoped
-    @ContributesAndroidInjector(modules = {QuakesModule.class})
-    abstract QuakesActivity ratesActivity();
+    @ContributesAndroidInjector(modules = [QuakesModule::class])
+    abstract fun quakesActivity(): QuakesActivity?
 }
