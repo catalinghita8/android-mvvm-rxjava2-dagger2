@@ -33,7 +33,7 @@ public class QuakesScreenTest {
     @Test
     public void displayItemsInList(){
         // check if the ListView is visible
-        onView(withId(R.id.quakes_list)).check(matches(isDisplayed()));
+        onView(withId(R.id.quakesListView)).check(matches(isDisplayed()));
     }
 }
 

@@ -1,6 +1,7 @@
 apply plugin: 'com.android.application'
 apply plugin: 'kotlin-android-extensions'
 apply plugin: 'kotlin-android'
+apply plugin: 'kotlin-kapt'
 
 android {
     compileSdkVersion rootProject.ext.compileSdkVersion
@@ -78,21 +79,21 @@ dependencies {
 
     implementation "androidx.room:room-rxjava2:$rootProject.roomVersion"
     implementation "androidx.room:room-runtime:$rootProject.roomVersion"
-    annotationProcessor "androidx.room:room-compiler:$rootProject.roomVersion"
+    kapt "androidx.room:room-compiler:$rootProject.roomVersion"
+    implementation "androidx.room:room-ktx:2.3.0"
     androidTestImplementation "androidx.room:room-testing:$rootProject.roomVersion"
 
     // Dagger dependencies
-    annotationProcessor "com.google.dagger:dagger-compiler:$rootProject.daggerVersion"
-    compileOnly 'org.glassfish:javax.annotation:10.0-b28'
-    implementation "com.google.dagger:dagger:$rootProject.daggerVersion"
-    implementation "com.google.dagger:dagger-android:$rootProject.daggerVersion"
-    implementation "com.google.dagger:dagger-android-support:$rootProject.daggerVersion"
+    kapt "com.google.dagger:dagger-compiler:$rootProject.daggerVersion"
     annotationProcessor "com.google.dagger:dagger-android-processor:$rootProject.daggerVersion"
+    implementation "com.google.dagger:dagger:$rootProject.daggerVersion"
+    implementation "com.google.dagger:dagger-android-support:$rootProject.daggerVersion"
+    kapt "com.google.dagger:dagger-android-processor:$rootProject.daggerVersion"
 
     // Android Architecture components dependencies
     implementation "androidx.lifecycle:lifecycle-runtime:$arch_version"
     implementation "androidx.lifecycle:lifecycle-extensions:$arch_version"
-    annotationProcessor "androidx.lifecycle:lifecycle-compiler:$arch_version"
+    kapt "androidx.lifecycle:lifecycle-compiler:$arch_version"
 
     // RxJava dependencies
     implementation "io.reactivex.rxjava2:rxandroid:$rootProject.rxandroidVersion"
