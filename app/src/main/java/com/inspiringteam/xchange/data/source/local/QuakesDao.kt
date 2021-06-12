@@ -1,26 +1,17 @@
-package com.inspiringteam.xchange.data.source.local;
+package com.inspiringteam.xchange.data.source.local
 
-import androidx.room.Dao;
-import androidx.room.Insert;
-import androidx.room.OnConflictStrategy;
-import androidx.room.Query;
-import androidx.room.Update;
-
-import com.inspiringteam.xchange.data.models.Quake;
-
-import java.util.List;
-
-import io.reactivex.Single;
+import androidx.room.*
+import com.inspiringteam.xchange.data.models.Quake
+import io.reactivex.Single
+import java.util.*
 
 /**
  * Room Dao interface
  */
 @Dao
-public interface QuakesDao {
-
+interface QuakesDao {
     @Query("SELECT * FROM Quakes ")
-    Single<List<Quake>> getQuakes();
-
+    fun getQuakes(): Single<MutableList<Quake>>
 
     /**
      * Retrieve a quake by id.
@@ -29,9 +20,7 @@ public interface QuakesDao {
      * @return the quake with quakeId
      */
     @Query("SELECT * FROM Quakes WHERE id = :quakeId")
-    Single<Quake> getQuakeById(String quakeId);
-    
-
+    fun getQuakeById(quakeId: String): Single<Quake>
 
     /**
      * Insert Quake in the database. If the Quake already exists, ignore the action.
@@ -39,7 +28,7 @@ public interface QuakesDao {
      * @param Quake to be inserted.
      */
     @Insert(onConflict = OnConflictStrategy.REPLACE)
-    void insertQuake(Quake Quake);
+    fun insertQuake(Quake: Quake)
 
     /**
      * Delete a Quake by id.
@@ -47,16 +36,14 @@ public interface QuakesDao {
      * @return the number of Quakes deleted. This should always be 1.
      */
     @Query("DELETE FROM Quakes WHERE id = :QuakeId")
-    int deleteQuakeById(String QuakeId);
-
+    fun deleteQuakeById(QuakeId: String): Int
 
     /**
      * Delete all Quake (items).
      */
     @Query("DELETE FROM Quakes")
-    void deleteQuakes();
+    fun deleteQuakes()
 
     @Update
-    int updateQuake(Quake Quake);
+    fun updateQuake(Quake: Quake): Int
 }
-
