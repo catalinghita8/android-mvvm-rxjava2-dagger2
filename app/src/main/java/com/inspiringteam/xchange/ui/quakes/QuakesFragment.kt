@@ -31,8 +31,9 @@ class QuakesFragment @Inject constructor() : Fragment(), BaseView {
     @JvmField
     @Inject
     var viewModelFactory: ViewModelProvider.Factory? = null
-    override fun onActivityCreated(savedInstanceState: Bundle?) {
-        super.onActivityCreated(savedInstanceState)
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
         viewModel = ViewModelProviders.of(this, viewModelFactory).get(
             QuakesViewModel::class.java
         )
@@ -113,9 +114,9 @@ class QuakesFragment @Inject constructor() : Fragment(), BaseView {
 
     private fun setupSwipeRefreshLayout() {
         refreshLayout.setColorSchemeColors(
-            ContextCompat.getColor(activity!!, R.color.colorPrimary),
-            ContextCompat.getColor(activity!!, R.color.colorAccent),
-            ContextCompat.getColor(activity!!, R.color.colorPrimaryDark)
+            ContextCompat.getColor(requireActivity(), R.color.colorPrimary),
+            ContextCompat.getColor(requireActivity(), R.color.colorAccent),
+            ContextCompat.getColor(requireActivity(), R.color.colorPrimaryDark)
         )
         // Set the scrolling view in the custom SwipeRefreshLayout.
         refreshLayout.setScrollUpChild(quakesListView)
@@ -130,7 +131,12 @@ class QuakesFragment @Inject constructor() : Fragment(), BaseView {
                 .subscribe(
                     { model: QuakesUiModel -> updateView(model) }
                 )  //onError
-                { error: Throwable? -> Log.d(TAG, "Error loading quakes") })
+                { error: Throwable? ->
+                    Log.d(
+                        TAG,
+                        "Error loading quakes: " + error?.localizedMessage
+                    )
+                })
     }
 
     private fun updateView(model: QuakesUiModel) {
@@ -154,7 +160,7 @@ class QuakesFragment @Inject constructor() : Fragment(), BaseView {
     }
 
     private fun showSnackbar(@StringRes message: Int) {
-        Snackbar.make(view!!, message, Snackbar.LENGTH_LONG).show()
+        Snackbar.make(requireView(), message, Snackbar.LENGTH_LONG).show()
     }
 
     private fun setLoadingIndicatorVisibility(isVisible: Boolean) {
