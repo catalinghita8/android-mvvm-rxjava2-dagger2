@@ -30,17 +30,6 @@ class QuakesViewModel @Inject constructor(
     private val snackBarTextView: PublishSubject<Int> = PublishSubject.create()
 
     /**
-     * @return the model for the quakes screen
-     */
-    fun getUiModel(isForcedCall: Boolean): Single<QuakesUiModel> {
-        return getQuakeItems(isForcedCall)
-            .doOnSubscribe { loadingIndicatorSubject.onNext(true) }
-            .doOnSuccess { loadingIndicatorSubject.onNext(false) }
-            .doOnError { snackBarTextView.onNext(R.string.loading_quakes_error) }
-            .map { quakes: List<QuakeItem> -> constructQuakesModel(quakes) }
-    }
-
-    /**
      * @return a stream of ids that should be displayed in the snackBar
      */
     val snackBarMessage: Observable<Int>
@@ -52,6 +41,16 @@ class QuakesViewModel @Inject constructor(
     val loadingIndicatorVisibility: Observable<Boolean>
         get() = loadingIndicatorSubject.hide()
 
+    /**
+     * @return the model for the quakes screen
+     */
+    fun getUiModel(isForcedCall: Boolean): Single<QuakesUiModel> {
+        return getQuakeItems(isForcedCall)
+            .doOnSubscribe { loadingIndicatorSubject.onNext(true) }
+            .doOnSuccess { loadingIndicatorSubject.onNext(false) }
+            .doOnError { snackBarTextView.onNext(R.string.loading_quakes_error) }
+            .map { quakes: List<QuakeItem> -> constructQuakesModel(quakes) }
+    }
 
     fun bindTabsService() = tabsWrapper.unbindCustomTabsService()
 
@@ -66,7 +65,8 @@ class QuakesViewModel @Inject constructor(
             repository.deleteAllQuakes()
         return repository.getQuakes()
             .flatMap { list: List<Quake>? ->
-                Observable.fromIterable(list)
+                Observable
+                    .fromIterable(list)
                     .map { quake: Quake -> constructQuakeItem(quake) }.toList()
             }
     }
@@ -82,7 +82,9 @@ class QuakesViewModel @Inject constructor(
         if (quakes.isEmpty())
             noQuakesModel = getNoQuakesModel()
         return QuakesUiModel(
-            isQuakesListVisible, quakes, isNoQuakesViewVisible,
+            isQuakesListVisible,
+            quakes,
+            isNoQuakesViewVisible,
             noQuakesModel
         )
     }
