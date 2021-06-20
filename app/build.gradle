@@ -91,7 +91,7 @@ dependencies {
     kapt "com.google.dagger:dagger-android-processor:$rootProject.daggerVersion"
 
     // Android Architecture components dependencies
-    implementation "androidx.lifecycle:lifecycle-runtime:$arch_version"
+    implementation "androidx.lifecycle:lifecycle-runtime-ktx:$arch_version"
     implementation "androidx.lifecycle:lifecycle-extensions:$arch_version"
     kapt "androidx.lifecycle:lifecycle-compiler:$arch_version"
 
